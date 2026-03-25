@@ -1,8 +1,9 @@
-// app/api/products/facets/route.js
-import { createClient } from "@supabase/supabase-js";
 import { supabase } from "src/services/reducers/supabaseClient";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
+  if (!supabase) return Response.json({ error: "Supabase not configured" }, { status: 500 });
   try {
     const { data: products, error } = await supabase
       .from("products")

@@ -1,6 +1,9 @@
 import { supabase } from "src/services/reducers/supabaseClient";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
+  if (!supabase) return Response.json({ error: "Supabase not configured" }, { status: 500 });
   const url = new URL(req.url);
   const search = url.searchParams.get("search");
   const page = Number(url.searchParams.get("page") || 1);

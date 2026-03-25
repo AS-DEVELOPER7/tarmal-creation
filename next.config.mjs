@@ -2,13 +2,12 @@
 const nextConfig = {
   images: {
     // Works for the reference design images + Unsplash if you re-enable later
-    domains: [
-      "lh3.googleusercontent.com",
-      "images.unsplash.com",
-      "source.unsplash.com",
-      "res.cloudinary.com",
+    remotePatterns: [
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "source.unsplash.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
-    // (Next >=15 also supports remotePatterns; domains is enough here)
   },
 };
 

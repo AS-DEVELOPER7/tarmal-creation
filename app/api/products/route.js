@@ -1,6 +1,10 @@
 import { supabase } from "src/services/reducers/supabaseClient";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
+  if (!supabase) return Response.json({ error: "Supabase not configured" }, { status: 500 });
+
   const { data, error } = await supabase
     .from("products")
     .select("*")
@@ -12,6 +16,8 @@ export async function GET() {
 }
 
 export async function POST(req) {
+  if (!supabase) return Response.json({ error: "Supabase not configured" }, { status: 500 });
+  
   const body = await req.json();
 
   const { error } = await supabase.from("products").insert(body);
