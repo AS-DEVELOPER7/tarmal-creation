@@ -9,6 +9,8 @@ const nextConfig = {
       { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
+  // Allow local network IP for development access
+  allowedDevOrigins: ["192.168.0.57"],
 };
 
 export default nextConfig;

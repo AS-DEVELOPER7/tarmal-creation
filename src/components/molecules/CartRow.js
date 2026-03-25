@@ -26,6 +26,7 @@ export default function CartRow({ item, onInc, onDec, onRemove }) {
             alt={item.name}
             fill
             className="object-contain! bg-surface-base"
+            sizes="96px"
           />
         </div>
 

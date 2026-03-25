@@ -11,6 +11,7 @@ export default function ImageWithFallback({
   width,
   height,
   className,
+  sizes = "100vw",
   ...props
 }) {
   const [error, setError] = useState(!src);
@@ -34,6 +35,7 @@ export default function ImageWithFallback({
       width={width}
       height={height}
       className={className}
+      sizes={sizes}
       onError={() => setError(true)}
       {...props}
     />

@@ -68,6 +68,7 @@ export default function ReviewOrderDetails({
                     alt={it.name}
                     fill
                     className="object-contain! bg-surface-base"
+                    sizes="48px"
                   />
                 </div>
                 <div className="flex-1 min-w-0">

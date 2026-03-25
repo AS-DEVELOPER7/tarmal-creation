@@ -24,7 +24,8 @@ export default function CheckoutSummary({ items, shippingCharge }) {
             <div key={it.cartId || it.id} className="flex items-center gap-3">
               <div className="relative w-14 h-14 rounded-lg overflow-hidden">
                 <ImageWithFallback src={img} alt={it.name} fill
-                  className="object-contain! bg-surface-base" />
+                  className="object-contain! bg-surface-base" 
+                  sizes="56px" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{it.name}</p>

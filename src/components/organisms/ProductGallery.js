@@ -63,6 +63,7 @@ export default function ProductGallery({ product, selectedVariant, onSelectVaria
                 alt={`${product?.title} thumbnail ${i + 1}`}
                 fill
                 className="object-contain bg-surface-base"
+                sizes="100px"
               />
             </button>
           ))}
