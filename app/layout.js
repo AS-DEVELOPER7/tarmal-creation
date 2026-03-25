@@ -7,6 +7,10 @@ export const metadata = {
   title: "Tarmal Creation – Handcrafted Jewelry",
   description:
     "An elegant jewelry boutique showcasing timeless handcrafted designs.",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

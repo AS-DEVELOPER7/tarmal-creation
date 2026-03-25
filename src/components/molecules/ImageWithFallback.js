@@ -4,20 +4,19 @@ import { useState } from "react";
 import Image from "next/image";
 import { HiOutlinePhotograph } from "react-icons/hi";
 
-export default function ImageWithFallback({ 
-  src, 
-  alt, 
-  fill, 
-  width, 
-  height, 
-  className, 
-  ...props 
+export default function ImageWithFallback({
+  src,
+  alt,
+  fill,
+  width,
+  height,
+  className,
+  ...props
 }) {
   const [error, setError] = useState(!src);
-
   if (error || !src) {
     return (
-      <div 
+      <div
         className={`flex flex-col items-center justify-center bg-surface-base text-muted/30 border border-border/50 ${className}`}
         style={fill ? { width: "100%", height: "100%" } : { width, height }}
       >
