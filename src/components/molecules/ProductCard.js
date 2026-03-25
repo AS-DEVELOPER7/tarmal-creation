@@ -17,7 +17,15 @@ export default function ProductCard({ product }) {
 
   if (!product) return null;
 
-  const { id, title: name, price, sold_out: soldOut, images, sizes, variants } = product;
+  const {
+    id,
+    title: name,
+    price,
+    sold_out: soldOut,
+    images,
+    sizes,
+    variants,
+  } = product;
   const image = images?.[0] || product.image;
 
   const handleAdd = (e) => {
@@ -38,7 +46,7 @@ export default function ProductCard({ product }) {
         price,
         soldOut,
         qty: 1,
-      })
+      }),
     );
 
     show({
@@ -66,8 +74,9 @@ export default function ProductCard({ product }) {
           alt={name}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
-          className={`object-cover transition-transform duration-700 group-hover:scale-105 ${soldOut ? "opacity-60 grayscale" : ""
-            }`}
+          className={`object-contain transition-transform duration-700 group-hover:scale-105 ${
+            soldOut ? "opacity-60 grayscale" : ""
+          }`}
         />
         {soldOut && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center font-display tracking-widest uppercase text-xs text-white font-semibold backdrop-blur-sm">

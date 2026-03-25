@@ -4,10 +4,16 @@ import { useState, useEffect } from "react";
 import ImageWithFallback from "../molecules/ImageWithFallback";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function ProductGallery({ product, selectedVariant, onSelectVariant }) {
+export default function ProductGallery({
+  product,
+  selectedVariant,
+  onSelectVariant,
+}) {
   const [activeIdx, setActiveIdx] = useState(0);
 
-  const images = selectedVariant?.images?.length ? selectedVariant.images : product?.images || [];
+  const images = selectedVariant?.images?.length
+    ? selectedVariant.images
+    : product?.images || [];
   const mainImg = images[activeIdx] || images[0];
 
   useEffect(() => {
@@ -30,7 +36,7 @@ export default function ProductGallery({ product, selectedVariant, onSelectVaria
               src={mainImg}
               alt={product?.title || "Product Image"}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="object-contain transition-transform duration-700 group-hover:scale-105"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
@@ -52,10 +58,11 @@ export default function ProductGallery({ product, selectedVariant, onSelectVaria
             <button
               key={i}
               onClick={() => setActiveIdx(i)}
-              className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 ${i === activeIdx
-                ? "border-primary shadow-md scale-105"
-                : "border-transparent hover:border-primary/50 opacity-70 hover:opacity-100"
-                }`}
+              className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                i === activeIdx
+                  ? "border-primary shadow-md scale-105"
+                  : "border-transparent hover:border-primary/50 opacity-70 hover:opacity-100"
+              }`}
               aria-label={`View thumbnail ${i + 1}`}
             >
               <ImageWithFallback
