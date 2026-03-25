@@ -27,7 +27,9 @@ const cartReducer = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-      const existing = state.items.find((i) => i.id === item.id);
+      const existing = state.items.find(
+        (i) => i.id === item.id && i.color === item.color && i.size === item.size
+      );
       if (existing) {
         existing.qty += item.qty || 1;
       } else {

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { FaHammer, FaLeaf, FaHeart } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { ABOUT_US_IMAGES } from "src/data";
+import { ABOUT_US_IMAGES } from "src/constants/images";
 
 export default function AboutPage() {
   return (

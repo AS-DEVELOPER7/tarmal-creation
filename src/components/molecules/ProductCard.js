@@ -3,131 +3,102 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  removeFromCart,
-  updateQuantity,
-} from "src/services/reducers/cartReducer";
-import { HiOutlinePlus, HiOutlineMinus, HiOutlineTrash } from "react-icons/hi2";
+import { useDispatch } from "react-redux";
+import { addToCart } from "src/services/reducers/cartReducer";
 import { RiShoppingBagLine } from "react-icons/ri";
-import { LuEye } from "react-icons/lu";
 import { useToast } from "../ui/ToastProvider";
 import { CURRENCY } from "src/constants";
-import { FALLBACK_IMG } from "src/data";
+import ImageWithFallback from "./ImageWithFallback";
+import { motion } from "framer-motion";
 
-export default function ProductCard({ id, name, image, price, soldOut }) {
+export default function ProductCard({ product }) {
   const dispatch = useDispatch();
   const { show } = useToast();
 
-  const cart = useSelector((state) => state.cart.items || []);
-  const itemInCart = cart.find((i) => i.id === id);
+  if (!product) return null;
 
-  const handleAdd = () => {
-    dispatch(addToCart({ id, name, image, price, soldOut, qty: 1 }));
-    show({ type: "success", title: "Added to cart", description: name });
+  const { id, title: name, price, sold_out: soldOut, images, sizes, variants } = product;
+  const image = images?.[0] || product.image;
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    if (soldOut) return;
+
+    // Use default variations (first color/size)
+    const defaultColor = variants?.[0]?.color || null;
+    const defaultSize = sizes?.[0] || null;
+
+    dispatch(
+      addToCart({
+        id,
+        name,
+        color: defaultColor,
+        size: defaultSize,
+        image: image,
+        price,
+        soldOut,
+        qty: 1,
+      })
+    );
+
+    show({
+      type: "success",
+      title: "Added to cart",
+      description: `${name}${defaultColor ? ` - ${defaultColor}` : ""}${defaultSize ? ` (${defaultSize})` : ""}`,
+    });
   };
 
-  const handleRemove = () => {
-    if (!itemInCart) return;
-    dispatch(removeFromCart(itemInCart.cartId));
-  };
-
-  const handleQtyChange = (delta) => {
-    if (!itemInCart) return;
-    const newQty = itemInCart.qty + delta;
-    if (newQty <= 0) handleRemove();
-    else dispatch(updateQuantity({ cartId: itemInCart.cartId, qty: newQty }));
-  };
   return (
-    <div className="bg-bg rounded-lg group overflow-hidden  w-[250px] sm:w-[280px] md:w-[300px] flex flex-col border border-border hover:shadow-md transition">
-      {/* Image -> product details */}
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="group w-full flex flex-col"
+    >
+      {/* Image Container */}
       <Link
         href={`/product/${id}`}
-        className="relative aspect-square overflow-hidden w-full block"
+        className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-base mb-4 block"
       >
-        <Image
-          src={image || FALLBACK_IMG}
+        <ImageWithFallback
+          src={image}
           alt={name}
           fill
-          className={`object-cover group-hover:scale-110  transition-all duration-500 ${
-            soldOut ? "opacity-60 grayscale" : ""
-          }`}
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className={`object-cover transition-transform duration-700 group-hover:scale-105 ${soldOut ? "opacity-60 grayscale" : ""
+            }`}
         />
         {soldOut && (
-          <div className="absolute inset-0 bg-overlay flex items-center justify-center text-bg font-semibold">
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center font-display tracking-widest uppercase text-xs text-white font-semibold backdrop-blur-sm">
             Sold Out
+          </div>
+        )}
+
+        {/* Hover overlay + Add to cart button */}
+        {!soldOut && (
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 px-4">
+            <button
+              onClick={handleAdd}
+              className="w-full bg-white/95 backdrop-blur-sm text-base font-semibold py-3 rounded-xl shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 hover:bg-primary hover:text-white"
+            >
+              <RiShoppingBagLine className="text-lg" /> Quick Add
+            </button>
           </div>
         )}
       </Link>
 
       {/* Info */}
-      <div className="p-4 flex flex-col grow justify-between">
-        <div>
-          <Link href={`/product/${id}`}>
-            <h3 className="font-semibold text-base mb-1 hover:text-primary transition">
-              {name}
-            </h3>
-          </Link>
-          <p className="text-muted text-sm mb-3">
-            {price.toFixed(2)} {CURRENCY}
-          </p>
-        </div>
-
-        {/* Cart actions */}
-        {soldOut ? (
-          <button
-            disabled
-            className="w-full py-2 rounded-lg bg-surface text-muted font-semibold cursor-not-allowed"
-          >
-            Sold Out
-          </button>
-        ) : itemInCart ? (
-          <div className="flex items-center justify-between border border-border rounded-lg overflow-hidden">
-            <div className="flex items-center flex-1 justify-center">
-              <button
-                onClick={() => handleQtyChange(-1)}
-                className="flex-1 p-3 flex justify-center text-sm font-bold items-center text-primary hover:bg-primary hover:text-bg transition w-10"
-              >
-                <HiOutlineMinus />
-              </button>
-              <span className="flex-1 text-center mx-3 text-sm font-semibold">
-                {itemInCart.qty}
-              </span>
-              <button
-                onClick={() => handleQtyChange(1)}
-                className="flex-1 p-3 flex justify-center text-sm font-bold items-center text-primary hover:bg-primary hover:text-bg transition w-10"
-              >
-                <HiOutlinePlus />
-              </button>
-            </div>
-            <button
-              onClick={handleRemove}
-              className="p-2 text-muted hover:text-primary border-l border-border transition w-10 flex justify-center"
-              title="Remove item"
-            >
-              <HiOutlineTrash />
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-row gap-2">
-            <button
-              onClick={handleAdd}
-              className="flex items-center justify-center w-full py-2 bg-primary text-bg font-semibold rounded-lg hover:opacity-90 transition"
-            >
-              <RiShoppingBagLine className="mr-2 text-lg" />
-              Add to Cart
-            </button>
-            <Link
-              href={`/product/${id}`}
-              className="p-3 text-center items-center justify-center text-lg font-medium border border-border rounded-lg text-muted hover:text-primary hover:border-primary transition"
-              title="View product"
-            >
-              <LuEye />
-            </Link>
-          </div>
-        )}
+      <div className="flex flex-col text-center px-2">
+        <Link href={`/product/${id}`}>
+          <h3 className="font-serif text-lg leading-tight mb-2 hover:text-primary transition-colors line-clamp-1">
+            {name}
+          </h3>
+        </Link>
+        <p className="text-muted font-display font-medium">
+          {price?.toFixed(2)} {CURRENCY}
+        </p>
       </div>
-    </div>
+    </motion.div>
   );
 }

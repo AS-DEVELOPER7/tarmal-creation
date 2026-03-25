@@ -6,6 +6,7 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "images.unsplash.com",
       "source.unsplash.com",
+      "res.cloudinary.com",
     ],
     // (Next >=15 also supports remotePatterns; domains is enough here)
   },
