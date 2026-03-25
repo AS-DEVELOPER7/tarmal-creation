@@ -10,6 +10,16 @@ export default function ProductGallery({
   onSelectVariant,
 }) {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+  const [isZooming, setIsZooming] = useState(false);
+
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomPos({ x, y });
+  };
 
   const images = selectedVariant?.images?.length
     ? selectedVariant.images
@@ -22,7 +32,12 @@ export default function ProductGallery({
   return (
     <div className="flex flex-col gap-6 w-full">
       {/* Main Image */}
-      <div className="relative group overflow-hidden rounded-2xl aspect-[4/5] sm:aspect-square bg-surface-base w-full shadow-sm">
+      <div
+        className="relative group overflow-hidden rounded-2xl aspect-square sm:aspect-square bg-surface-base w-full shadow-sm cursor-zoom-in"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsZooming(true)}
+        onMouseLeave={() => setIsZooming(false)}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={mainImg || "fallback"}
@@ -32,17 +47,24 @@ export default function ProductGallery({
             transition={{ duration: 0.3 }}
             className="absolute inset-0"
           >
-            <ImageWithFallback
-              src={mainImg}
-              alt={product?.title || "Product Image"}
-              fill
-              className="object-contain transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
+            <div
+              className="relative w-full h-full transition-transform duration-200 ease-out"
+              style={{
+                transform: isZooming ? "scale(2)" : "scale(1)",
+                transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+              }}
+            >
+              <ImageWithFallback
+                src={mainImg}
+                alt={product?.title || "Product Image"}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
+            </div>
           </motion.div>
         </AnimatePresence>
-        <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10 rounded-2xl" />
+        <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/5 rounded-2xl" />
 
         {product?.sold_out && (
           <div className="absolute top-4 right-4 bg-black text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full backdrop-blur-md bg-opacity-80">

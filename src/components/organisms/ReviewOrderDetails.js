@@ -73,8 +73,12 @@ export default function ReviewOrderDetails({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{it.name}</p>
-                  {it.color && <p className="text-xs text-muted">Color: {it.color}</p>}
-                  {it.size && <p className="text-xs text-muted">Size: {it.size}</p>}
+                  {it.color && (
+                    <p className="text-xs text-muted">Color: {it.color}</p>
+                  )}
+                  {it.size && (
+                    <p className="text-xs text-muted">Size: {it.size}</p>
+                  )}
                   <p className="text-xs text-muted">Qty: {it.qty}</p>
                 </div>
                 <p className="text-sm font-semibold">{money(it.price)}</p>

@@ -10,7 +10,7 @@ export default function ImageWithFallback({
   fill,
   width,
   height,
-  className,
+  className = "",
   sizes = "100vw",
   ...props
 }) {
@@ -34,7 +34,7 @@ export default function ImageWithFallback({
       fill={fill}
       width={width}
       height={height}
-      className={className}
+      className={`${className} ${!className.includes("object-") ? "object-contain" : ""}`}
       sizes={sizes}
       onError={() => setError(true)}
       {...props}
