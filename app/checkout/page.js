@@ -11,6 +11,11 @@ import {
 } from "src/services/reducers/cartReducer";
 import { useToast } from "src/components/ui/ToastProvider";
 import { money } from "src/utils/money";
+import {
+  SHIPPING_THRESHOLD,
+  SHIPPING_COST,
+  FREE_SHIPPING_CITY,
+} from "src/constants";
 
 import Stepper from "src/components/molecules/Stepper";
 import CheckoutSummary from "src/components/organisms/CheckoutSummary";
@@ -28,7 +33,7 @@ export default function CheckoutPage() {
   const savedPayment = useSelector((s) => s.cart?.payment ?? "");
 
   const [step, setStep] = useState(1);
-  const [shippingCharge, setShippingCharge] = useState(500); // 5 INR by default
+  const [sending, setSending] = useState(false);
   const [payMethod, setPayMethod] = useState(savedPayment.method || "whatsapp");
 
   const [addr, setAddr] = useState({
@@ -46,10 +51,13 @@ export default function CheckoutPage() {
   const isCartEmpty = items.length === 0;
   const subtotal = useMemo(
     () => items.reduce((s, it) => s + it.price * it.qty, 0),
-    [items]
+    [items],
   );
-  const isFreeShipping = subtotal >= 200;
-  const effectiveShipping = isFreeShipping ? 0 : shippingCharge / 100;
+
+  const isInFreeCity =
+    addr.city?.trim().toLowerCase() === FREE_SHIPPING_CITY?.toLowerCase();
+  const isFreeShipping = subtotal >= SHIPPING_THRESHOLD || isInFreeCity;
+  const effectiveShipping = isFreeShipping ? 0 : SHIPPING_COST;
   const total = (subtotal + effectiveShipping).toFixed(2);
 
   /* ---------- validations ---------- */
@@ -107,7 +115,7 @@ export default function CheckoutPage() {
     setStep(3);
   };
 
-  const placeOrder = () => {
+  const placeOrder = async () => {
     if (isCartEmpty) {
       show({ type: "error", title: "Your cart is empty" });
       return;
@@ -121,30 +129,80 @@ export default function CheckoutPage() {
       setStep(2);
       return;
     }
-    // success
 
-    // Generate WhatsApp text
-    const itemsList = items.map(it => {
-      let desc = `- ${it.qty}x ${it.name}`;
-      if (it.color || it.size) {
-        desc += ` (${[it.color, it.size].filter(Boolean).join(" / ")})`;
+    try {
+      setSending(true);
+
+      // 1. Prepare Order Details
+      const itemsList = items
+        .map((it) => {
+          let desc = `- ${it.qty}x ${it.name}`;
+          const details = [];
+          if (it.color) details.push(`Color: ${it.color}`);
+          if (it.size) details.push(`Size: ${it.size}`);
+          if (details.length > 0) {
+            desc += ` (${details.join(", ")})`;
+          }
+          desc += ` [${money(it.price)}]`;
+          return desc;
+        })
+        .join("\n");
+
+      const addressStr = `${addr.name}\n${addr.street}\n${addr.city}, ${addr.state} ${addr.zip}\n${addr.phone}\n${addr.email}`;
+      const summaryText = `Subtotal: ${money(subtotal)}\nShipping: ${isFreeShipping ? "Free" : money(effectiveShipping)}\nTotal: ${money(total)}`;
+
+      const fullOrderDetails = `*Shipping Address:*\n${addressStr}\n\n*Items:*\n${itemsList}\n\n*Summary:*\n${summaryText}\n*Payment Method:* ${payMethod}`;
+
+      // 2. Send Email via Web3Forms
+      const formData = new FormData();
+      formData.append(
+        "access_key",
+        process.env.NEXT_PUBLIC_WEB3FORMS_NEW_ORDER_ACCESS_KEY,
+      );
+      formData.append("name", addr.name);
+      formData.append("email", addr.email);
+      formData.append(
+        "subject",
+        `New Order from ${addr.name} - ${money(total)}`,
+      );
+      formData.append("order_details", fullOrderDetails);
+      formData.append("from_name", "Tarmal Creation Order System");
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error("Failed to send order notification");
       }
-      desc += ` [${money(it.price)}]`;
-      return desc;
-    }).join("\n");
-    const addressStr = `${addr.name}\n${addr.street}\n${addr.city}, ${addr.state} ${addr.zip}\n${addr.phone}\n${addr.email}`;
-    const text = `*New Order!*\n*Shipping Address:*\n${addressStr}\n\n*Items:*\n${itemsList}\n\n*Summary:*\nSubtotal: ${money(subtotal)}\nShipping: ${isFreeShipping ? "Free" : money(effectiveShipping)}\nTotal: ${money(total)}`;
 
-    const encodedText = encodeURIComponent(text);
-    window.open(`https://wa.me/15551234567?text=${encodedText}`, '_blank');
+      // 3. Open WhatsApp as well (as per current flow)
+      const encodedText = encodeURIComponent(
+        `*New Order!*\n${fullOrderDetails}`,
+      );
+      window.open(`https://wa.me/15551234567?text=${encodedText}`, "_blank");
 
-    dispatch(clearCart());
-    show({
-      type: "success",
-      title: "Order placed!",
-      description: `Total ${money(total)}`,
-    });
-    setTimeout(() => router.push("/"), 900);
+      // 4. Finalize
+      dispatch(clearCart());
+      show({
+        type: "success",
+        title: "Order placed!",
+        description: `Total ${money(total)}`,
+      });
+      setTimeout(() => router.push("/"), 900);
+    } catch (error) {
+      console.error("Order error:", error);
+      show({
+        type: "error",
+        title: "Submission failed",
+        description: "We couldn't process your order. Please try again.",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   /* ---------- UI ---------- */
@@ -161,10 +219,9 @@ export default function CheckoutPage() {
               addr={addr}
               setAddr={setAddr}
               errors={errors}
-              setShippingCharge={setShippingCharge}
-              shippingCharge={shippingCharge}
               goNextFromShipping={goNextFromShipping}
               isFreeShipping={isFreeShipping}
+              shippingCost={effectiveShipping}
             />
           )}
 
@@ -184,12 +241,13 @@ export default function CheckoutPage() {
               payMethod={payMethod}
               items={items}
               placeOrder={placeOrder}
+              sending={sending}
             />
           )}
         </section>
 
         {/* RIGHT SIDE */}
-        <CheckoutSummary items={items} shippingCharge={shippingCharge} />
+        <CheckoutSummary items={items} shippingCharge={effectiveShipping} />
       </div>
     </main>
   );

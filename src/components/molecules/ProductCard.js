@@ -49,10 +49,14 @@ export default function ProductCard({ product }) {
       }),
     );
 
+    const colorDesc = Array.isArray(defaultColor)
+      ? defaultColor.join(" / ")
+      : defaultColor;
+
     show({
       type: "success",
       title: "Added to cart",
-      description: `${name}${defaultColor ? ` - ${defaultColor}` : ""}${defaultSize ? ` (${defaultSize})` : ""}`,
+      description: `${name}${colorDesc ? ` - ${colorDesc}` : ""}${defaultSize ? ` (${defaultSize})` : ""}`,
     });
   };
 
@@ -67,7 +71,7 @@ export default function ProductCard({ product }) {
       {/* Image Container */}
       <Link
         href={`/product/${id}`}
-        className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-base mb-4 block"
+        className="relative aspect-4/5 overflow-hidden rounded-2xl bg-surface-base mb-4 block"
       >
         <ImageWithFallback
           src={image}

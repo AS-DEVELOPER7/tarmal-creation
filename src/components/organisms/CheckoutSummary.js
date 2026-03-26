@@ -2,15 +2,15 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import { money } from "src/utils/money";
+import { SHIPPING_THRESHOLD } from "src/constants";
 import ImageWithFallback from "../molecules/ImageWithFallback";
 
 export default function CheckoutSummary({ items, shippingCharge }) {
   const subtotal = useMemo(
     () => items.reduce((s, it) => s + it.price * it.qty, 0),
-    [items]
+    [items],
   );
-  const isFreeShipping = subtotal >= 200;
-  const shipping = isFreeShipping ? 0 : shippingCharge / 100;
+  const shipping = shippingCharge;
   const total = subtotal + shipping;
 
   return (
@@ -23,14 +23,22 @@ export default function CheckoutSummary({ items, shippingCharge }) {
           return (
             <div key={it.cartId || it.id} className="flex items-center gap-3">
               <div className="relative w-14 h-14 rounded-lg overflow-hidden">
-                <ImageWithFallback src={img} alt={it.name} fill
-                  className="object-contain! bg-surface-base" 
-                  sizes="56px" />
+                <ImageWithFallback
+                  src={img}
+                  alt={it.name}
+                  fill
+                  className="object-contain! bg-surface-base"
+                  sizes="56px"
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{it.name}</p>
-                {it.color && <p className="text-xs text-muted">Color: {it.color}</p>}
-                {it.size && <p className="text-xs text-muted">Size: {it.size}</p>}
+                {it.color && (
+                  <p className="text-xs text-muted">Color: {it.color}</p>
+                )}
+                {it.size && (
+                  <p className="text-xs text-muted">Size: {it.size}</p>
+                )}
                 <p className="text-xs text-muted">Qty: {it.qty}</p>
               </div>
               <p className="text-sm font-semibold">{money(it.price)}</p>

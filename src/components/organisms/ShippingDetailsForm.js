@@ -1,16 +1,16 @@
 "use client";
 import Link from "next/link";
 import { money } from "src/utils/money";
+import { SHIPPING_COST } from "src/constants";
 
 export default function ShippingDetailsForm({
   invalid,
   addr,
   setAddr,
   errors,
-  setShippingCharge,
-  shippingCharge,
   goNextFromShipping,
   isFreeShipping,
+  shippingCost,
 }) {
   return (
     <>
@@ -120,54 +120,25 @@ export default function ShippingDetailsForm({
 
       {/* Delivery Preferences */}
       <div className="mt-4 space-y-3">
-        <p className="font-semibold">Delivery Preferences</p>
+        <p className="font-semibold">Delivery Preference</p>
 
-        <button
-          onClick={() => setShippingCharge(500)}
-          className={[
-            "w-full text-left rounded-xl border p-4 transition",
-            shippingCharge === 500
-              ? "border-primary bg-primary/10"
-              : "border-border hover:bg-surface",
-          ].join(" ")}
-        >
+        <div className="w-full text-left rounded-xl border border-primary bg-primary/10 p-4 transition">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span
-                className={`w-4 h-4 rounded-full border ${shippingCharge === 500
-                    ? "bg-primary border-primary"
-                    : "border-border"
-                  }`}
-              />
+              <span className="w-4 h-4 rounded-full border bg-primary border-primary" />
               <span>Standard Shipping</span>
             </div>
-            <span className="font-semibold">{isFreeShipping ? "Free" : money(5)}</span>
+            <span className="font-semibold">
+              {isFreeShipping ? "Free" : money(shippingCost)}
+            </span>
           </div>
-        </button>
-
-        {/* <button
-          onClick={() => setShippingCharge(1500)}
-          className={[
-            "w-full text-left rounded-xl border p-4 transition",
-            shippingCharge === 1500
-              ? "border-primary bg-primary/10"
-              : "border-border hover:bg-surface",
-          ].join(" ")}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span
-                className={`w-4 h-4 rounded-full border ${
-                  shippingCharge === 1500
-                    ? "bg-primary border-primary"
-                    : "border-border"
-                }`}
-              />
-              <span>Express Shipping</span>
-            </div>
-            <span className="font-semibold">{isFreeShipping ? "Free" : money(15)}</span>
-          </div>
-        </button> */}
+          {!isFreeShipping && (
+            <p className="mt-2 text-xs text-muted leading-relaxed italic">
+              * Delivery is free within Sagwara or on orders above{" "}
+              {money(5000)}.
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center justify-between pt-6 border-t border-border">

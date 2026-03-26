@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { CURRENCY } from "src/constants";
+import { CURRENCY, SHIPPING_THRESHOLD } from "src/constants";
 
 export default function CartSummary({
   items,
@@ -68,8 +68,9 @@ export default function CartSummary({
 
       <Link
         href="/checkout"
-        className={`mt-6 inline-flex w-full h-11 items-center justify-center rounded-full bg-primary text-white font-semibold hover:opacity-90 ${items.some((i) => i.soldOut) ? "opacity-60 pointer-events-none" : ""
-          }`}
+        className={`mt-6 inline-flex w-full h-11 items-center justify-center rounded-full bg-primary text-white font-semibold hover:opacity-90 ${
+          items.some((i) => i.soldOut) ? "opacity-60 pointer-events-none" : ""
+        }`}
         title={
           items.some((i) => i.soldOut)
             ? "Remove sold-out items to proceed"
@@ -80,9 +81,14 @@ export default function CartSummary({
       </Link>
 
       <p className="mt-3 text-xs text-muted">
-        {subtotal >= 200
+        {subtotal >= SHIPPING_THRESHOLD
           ? "You’ve unlocked free shipping!"
-          : `Add more items worth 200.00 ${CURRENCY} total to get free shipping.`}
+          : `Add more items worth ${(SHIPPING_THRESHOLD - subtotal).toFixed(
+              2
+            )} ${CURRENCY} total to get free shipping.`}
+      </p>
+      <p className="mt-2 text-xs text-primary/80 font-medium italic">
+        * Standard delivery is free within Sagwara city.
       </p>
     </aside>
   );

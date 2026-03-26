@@ -37,7 +37,12 @@ export default function CartRow({ item, onInc, onDec, onRemove }) {
             <div className="flex flex-wrap gap-x-3 gap-y-1 mb-1">
               {item.color && (
                 <p className="text-xs text-muted font-medium">
-                  Color: <span className="text-base-content">{item.color}</span>
+                  Color:{" "}
+                  <span className="text-base-content">
+                    {Array.isArray(item.color)
+                      ? item.color.join(" / ")
+                      : item.color}
+                  </span>
                 </p>
               )}
               {item.size && (

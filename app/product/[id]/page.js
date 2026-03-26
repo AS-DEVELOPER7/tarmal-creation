@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  removeFromCart,
-} from "src/services/reducers/cartReducer";
+import { addToCart, removeFromCart } from "src/services/reducers/cartReducer";
 import { useParams } from "next/navigation";
-import { useLazyGetProductByIdQuery, useLazySearchProductsQuery } from "src/services/api/productsApi";
+import {
+  useLazyGetProductByIdQuery,
+  useLazySearchProductsQuery,
+} from "src/services/api/productsApi";
 
 import ProductGallery from "src/components/organisms/ProductGallery";
 import ProductInfo from "src/components/organisms/ProductInfo";
@@ -19,13 +19,17 @@ export default function ProductDetails() {
   const { id } = useParams();
   const cart = useSelector((s) => s.cart.items || []);
 
-  const [getProductById, { data: product, isLoading }] = useLazyGetProductByIdQuery();
+  const [getProductById, { data: product, isLoading }] =
+    useLazyGetProductByIdQuery();
 
   useEffect(() => {
     if (id) getProductById(id);
   }, [id, getProductById]);
-  
-  const defaultVariant = product?.variants?.[0] || null;
+
+  const variants = product?.variants ? [...product.variants] : [];
+  const enhancedProduct = { ...product, variants };
+
+  const defaultVariant = enhancedProduct?.variants?.[0] || null;
   const defaultSize = product?.sizes?.[0] || null;
   const [selectedVariant, setSelectedVariant] = useState(defaultVariant);
   const [selectedSize, setSelectedSize] = useState(defaultSize);
@@ -37,7 +41,8 @@ export default function ProductDetails() {
     setQty(1);
   }, [product?.id, defaultVariant, defaultSize]);
 
-  const [searchProducts, { data: relatedProductsData }] = useLazySearchProductsQuery();
+  const [searchProducts, { data: relatedProductsData }] =
+    useLazySearchProductsQuery();
 
   useEffect(() => {
     if (product?.categories?.[0]) {
@@ -56,7 +61,7 @@ export default function ProductDetails() {
     return (
       <main className="bg-bg min-h-screen pt-24 pb-12 px-4 flex justify-center">
         <div className="animate-pulse w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <div className="aspect-[4/5] bg-surface-base rounded-2xl w-full"></div>
+          <div className="aspect-4/5 bg-surface-base rounded-2xl w-full"></div>
           <div className="space-y-6 pt-10">
             <div className="h-10 bg-surface-base rounded-lg w-3/4"></div>
             <div className="h-6 bg-surface-base rounded-lg w-1/4"></div>
@@ -68,10 +73,10 @@ export default function ProductDetails() {
   }
 
   const itemInCart = cart.find(
-    (i) => 
-      i.id === product.id && 
-      i.color === (selectedVariant?.color || null) && 
-      i.size === (selectedSize || null)
+    (i) =>
+      i.id === product.id &&
+      i.color === (selectedVariant?.color || null) &&
+      i.size === (selectedSize || null),
   );
 
   const handleAdd = () => {
@@ -86,7 +91,7 @@ export default function ProductDetails() {
         price: product.price,
         soldOut: product.sold_out,
         qty,
-      })
+      }),
     );
   };
 
@@ -101,30 +106,37 @@ export default function ProductDetails() {
       {/* Breadcrumbs */}
       <div className="px-4 sm:px-8 lg:px-16 py-8">
         <div className="max-w-7xl mx-auto flex flex-wrap gap-2 text-sm font-medium tracking-wide">
-          <Link href="/" className="text-muted hover:text-primary transition-colors">
+          <Link
+            href="/"
+            className="text-muted hover:text-primary transition-colors"
+          >
             Home
           </Link>
           <span className="text-border">/</span>
-          <Link href="/shop" className="text-muted hover:text-primary transition-colors">
+          <Link
+            href="/shop"
+            className="text-muted hover:text-primary transition-colors"
+          >
             Shop
           </Link>
           <span className="text-border">/</span>
-          <span className="text-base truncate max-w-[200px] sm:max-w-md">{product.title}</span>
+          <span className="text-base truncate max-w-[200px] sm:max-w-md">
+            {product.title}
+          </span>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="px-4 sm:px-8 lg:px-16 pb-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          
-          <ProductGallery 
-            product={product} 
+          <ProductGallery
+            product={enhancedProduct}
             selectedVariant={selectedVariant}
             onSelectVariant={setSelectedVariant}
           />
 
-          <ProductInfo 
-            product={product}
+          <ProductInfo
+            product={enhancedProduct}
             selectedVariant={selectedVariant}
             onSelectVariant={setSelectedVariant}
             selectedSize={selectedSize}
@@ -135,32 +147,41 @@ export default function ProductDetails() {
             onAdd={handleAdd}
             onRemove={handleRemove}
           />
-
         </div>
 
         {/* Description / Extra Details Section */}
         <div className="max-w-7xl mx-auto mt-24 pt-16 border-t border-border">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="md:col-span-1 border-b border-border md:border-none pb-4 md:pb-0">
-              <h3 className="font-serif text-2xl font-medium mb-4">The Details</h3>
+              <h3 className="font-serif text-2xl font-medium mb-4">
+                The Details
+              </h3>
               <p className="text-muted leading-relaxed font-light">
                 Designed for daily elegance, crafted with lasting materials.
                 Pair it with matching pieces in our collection for a refined
                 set.
               </p>
             </div>
-            
+
             <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div className="bg-surface-base p-8 rounded-2xl">
-                <h4 className="font-semibold uppercase tracking-widest text-sm mb-4">Shipping & Returns</h4>
+                <h4 className="font-semibold uppercase tracking-widest text-sm mb-4">
+                  Shipping & Returns
+                </h4>
                 <p className="text-muted text-sm leading-relaxed">
-                  Complimentary express shipping on all orders over 200 INR. Returns accepted within 30 days of delivery in original condition via our returns portal.
+                  Complimentary express shipping on all orders over 200 INR.
+                  Returns accepted within 30 days of delivery in original
+                  condition via our returns portal.
                 </p>
               </div>
               <div className="bg-surface-base p-8 rounded-2xl">
-                <h4 className="font-semibold uppercase tracking-widest text-sm mb-4">Care Guide</h4>
+                <h4 className="font-semibold uppercase tracking-widest text-sm mb-4">
+                  Care Guide
+                </h4>
                 <p className="text-muted text-sm leading-relaxed">
-                  Gently wipe with a soft cloth after wear to retain its brilliant shine. Store in the provided Aura pouch in a cool, dry place. Avoid contact with perfumes and lotions.
+                  Gently wipe with a soft cloth after wear to retain its
+                  brilliant shine. Store in the provided Aura pouch in a cool,
+                  dry place. Avoid contact with perfumes and lotions.
                 </p>
               </div>
             </div>

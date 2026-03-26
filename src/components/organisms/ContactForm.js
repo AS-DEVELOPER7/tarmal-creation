@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { FiUser, FiMail, FiSend } from "react-icons/fi";
+import Input from "../atoms/Input";
+import Button from "../atoms/Button";
+import TextArea from "../atoms/TextArea";
 
 export default function ContactForm() {
   const initial = {
     name: "",
     email: "",
-    subject: "",
     message: "",
   };
 
@@ -18,7 +21,6 @@ export default function ContactForm() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
       errs.email = "Please enter a valid email address.";
     }
-    if (!values.subject.trim()) errs.subject = "Subject is required.";
     if (!values.message.trim()) errs.message = "Message is required.";
     return errs;
   }
@@ -42,11 +44,36 @@ export default function ContactForm() {
 
     try {
       setSending(true);
-      // If you wire an API route later, call it here:
-      // await fetch("/api/contact", { method: "POST", body: JSON.stringify(values) });
-      await new Promise((r) => setTimeout(r, 900)); // mock request
-      setSent(true);
-      setValues(initial);
+
+      const formData = new FormData();
+      // Using whichever key is available, but recommending NEXT_PUBLIC_ for client-side
+      const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_CONTACT_US_ACCESS_KEY;
+
+      formData.append("access_key", accessKey);
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("subject", `Website Enquiry from ${values.name}`); // Custom Subject
+
+      formData.append("message", values.message);
+      formData.append("from_name", "Tarmal Creation Website Enquiry");
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSent(true);
+        setValues(initial);
+      } else {
+        console.error("Submission error:", data);
+        alert("Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Contact form error:", error);
+      alert("Failed to send message. Please check your connection.");
     } finally {
       setSending(false);
     }
@@ -66,15 +93,14 @@ export default function ContactForm() {
               <label htmlFor="name" className="block text-sm font-medium mb-2">
                 Full Name
               </label>
-              <input
+              <Input
                 id="name"
-                type="text"
+                name="name"
                 value={values.name}
                 onChange={onChange}
-                className={`w-full rounded-lg border bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                  errors.name ? "border-danger" : "border-border"
-                }`}
+                icon={FiUser}
                 placeholder="Enter your full name"
+                className={errors.name ? "border-danger" : ""}
               />
               {errors.name && (
                 <p className="mt-1 text-xs text-danger">{errors.name}</p>
@@ -84,16 +110,16 @@ export default function ContactForm() {
               <label htmlFor="email" className="block text-sm font-medium mb-2">
                 Email Address
               </label>
-              <input
+              <Input
                 id="email"
+                name="email"
                 type="email"
                 value={values.email}
                 onChange={onChange}
-                className={`w-full rounded-lg border bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                  errors.email ? "border-danger" : "border-border"
-                }`}
+                icon={FiMail}
                 placeholder="you@example.com"
                 inputMode="email"
+                className={errors.email ? "border-danger" : ""}
               />
               {errors.email && (
                 <p className="mt-1 text-xs text-danger">{errors.email}</p>
@@ -102,50 +128,32 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label htmlFor="subject" className="block text-sm font-medium mb-2">
-              Subject
-            </label>
-            <input
-              id="subject"
-              type="text"
-              value={values.subject}
-              onChange={onChange}
-              className={`w-full rounded-lg border bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                errors.subject ? "border-danger" : "border-border"
-              }`}
-              placeholder="e.g., Custom Order Inquiry"
-            />
-            {errors.subject && (
-              <p className="mt-1 text-xs text-danger">{errors.subject}</p>
-            )}
-          </div>
-
-          <div>
             <label htmlFor="message" className="block text-sm font-medium mb-2">
               Message
             </label>
-            <textarea
+            <TextArea
               id="message"
+              name="message"
               value={values.message}
               onChange={onChange}
               rows={6}
-              className={`w-full rounded-lg border bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                errors.message ? "border-danger" : "border-border"
-              }`}
               placeholder="Write your message here…"
+              className={errors.message ? "border-danger" : ""}
             />
             {errors.message && (
               <p className="mt-1 text-xs text-danger">{errors.message}</p>
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={sending}
-            className="w-full h-12 rounded-lg bg-primary text-white font-bold hover:opacity-90 disabled:opacity-60"
-          >
-            {sending ? "Sending…" : "Send Message"}
-          </button>
+          <Button type="submit" disabled={sending} className="w-full">
+            {sending ? (
+              "Sending…"
+            ) : (
+              <span className="flex items-center gap-2">
+                Send Message <FiSend />
+              </span>
+            )}
+          </Button>
         </form>
       </div>
     </div>

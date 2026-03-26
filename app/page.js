@@ -13,8 +13,7 @@ export default function HomePage() {
       <FeaturedProducts />
       <ExploreCollection />
       <OurStory />
-      <NewsLetter />
+      {/* <NewsLetter /> */}
     </main>
   );
 }
-

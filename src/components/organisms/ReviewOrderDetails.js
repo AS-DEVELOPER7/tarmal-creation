@@ -12,6 +12,7 @@ export default function ReviewOrderDetails({
   payMethod,
   items,
   placeOrder,
+  sending,
 }) {
   return (
     <>
@@ -97,10 +98,11 @@ export default function ReviewOrderDetails({
         </button>
         <button
           onClick={placeOrder}
-          className="h-11 px-6 rounded-xl text-white font-bold inline-flex items-center gap-2 bg-primary hover:opacity-90"
+          disabled={sending}
+          className="h-11 px-6 rounded-xl text-white font-bold inline-flex items-center gap-2 bg-primary hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span>Place Order</span>
-          <FaLock />
+          <span>{sending ? "Placing Order..." : "Place Order"}</span>
+          {!sending && <FaLock />}
         </button>
       </div>
     </>

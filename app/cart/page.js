@@ -8,6 +8,7 @@ import {
   updateQuantity,
   clearCart,
 } from "../../src/services/reducers/cartReducer";
+import { SHIPPING_THRESHOLD, SHIPPING_COST } from "src/constants";
 
 import { RiArrowLeftSLine } from "react-icons/ri";
 
@@ -25,7 +26,7 @@ export default function CartPage() {
       (acc, it) => acc + Number(it.price) * Number(it.qty),
       0
     );
-    const shipping = subtotal === 0 ? 0 : subtotal >= 200 ? 0 : 10;
+    const shipping = subtotal === 0 ? 0 : subtotal >= SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
     const discount = 0; // hook up promo if needed
     const total = Math.max(0, subtotal + shipping - discount);
     return { subtotal, shipping, discount, total };

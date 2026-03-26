@@ -23,12 +23,19 @@ export default function ProductInfo({
 
   const handleAdd = () => {
     onAdd();
-    show({ type: "success", title: "Added to cart", description: product.title });
+    show({
+      type: "success",
+      title: "Added to cart",
+      description: product.title,
+    });
   };
-
   return (
     <div className="flex flex-col py-2 w-full lg:pl-8">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <h1 className="text-4xl sm:text-5xl font-serif font-medium leading-tight mb-2 text-base">
           {product.title}
         </h1>
@@ -40,12 +47,18 @@ export default function ProductInfo({
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-8">
         {product.materials?.map((m) => (
-          <span key={m} className="text-xs font-medium uppercase tracking-widest px-4 py-1.5 rounded-full bg-surface-base text-muted border border-border">
+          <span
+            key={m}
+            className="text-xs font-medium uppercase tracking-widest px-4 py-1.5 rounded-full bg-surface-base text-muted border border-border"
+          >
             {m}
           </span>
         ))}
         {product.styles?.map((s) => (
-          <span key={s} className="text-xs font-medium uppercase tracking-widest px-4 py-1.5 rounded-full bg-surface-base text-muted border border-border">
+          <span
+            key={s}
+            className="text-xs font-medium uppercase tracking-widest px-4 py-1.5 rounded-full bg-surface-base text-muted border border-border"
+          >
             {s}
           </span>
         ))}
@@ -65,22 +78,41 @@ export default function ProductInfo({
             Select Color
           </label>
           <div className="flex flex-wrap gap-4">
-            {product.variants.map((v) => (
-              <button
-                key={v.color}
-                onClick={() => onSelectVariant(v)}
-                className={`flex items-center gap-3 p-2 pr-4 rounded-full border transition-all duration-300 ${selectedVariant?.color === v.color
-                    ? "border-primary bg-surface shadow-sm ring-1 ring-primary/20"
-                    : "border-border hover:border-primary/50 bg-transparent"
+            {product.variants.map((v) => {
+              const isArrayColor = Array.isArray(v.color);
+              const colorLabel = isArrayColor ? v.color.join(" / ") : v.color;
+
+              const backgroundStyle = isArrayColor
+                ? {
+                    background: `conic-gradient(${v.color
+                      .map((c, i) => {
+                        const start = (i * 360) / v.color.length;
+                        const end = ((i + 1) * 360) / v.color.length;
+                        return `${c.toLowerCase()} ${start}deg ${end}deg`;
+                      })
+                      .join(", ")})`,
+                  }
+                : { backgroundColor: v.color.toLowerCase() };
+
+              return (
+                <button
+                  key={colorLabel}
+                  onClick={() => onSelectVariant(v)}
+                  className={`flex items-center gap-3 p-2 pr-4 rounded-full border transition-all duration-300 ${
+                    JSON.stringify(selectedVariant?.color) ===
+                    JSON.stringify(v.color)
+                      ? "border-primary bg-surface shadow-sm ring-1 ring-primary/20"
+                      : "border-border hover:border-primary/50 bg-transparent"
                   }`}
-              >
-                <span
-                  className="w-6 h-6 rounded-full border border-black/10 shadow-inner"
-                  style={{ backgroundColor: v.color.toLowerCase() }}
-                />
-                <span className="text-sm font-medium">{v.color}</span>
-              </button>
-            ))}
+                >
+                  <span
+                    className="w-6 h-6 rounded-full border border-black/10 shadow-inner"
+                    style={backgroundStyle}
+                  />
+                  <span className="text-sm font-medium">{colorLabel}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
@@ -96,10 +128,11 @@ export default function ProductInfo({
               <button
                 key={s}
                 onClick={() => onSelectSize(s)}
-                className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 ${selectedSize === s
+                className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 ${
+                  selectedSize === s
                     ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
                     : "border-border hover:border-primary/50 text-muted bg-transparent"
-                  }`}
+                }`}
               >
                 {s}
               </button>
@@ -126,16 +159,27 @@ export default function ProductInfo({
 
         <div className="flex-1 flex items-end">
           {product.sold_out ? (
-            <Button disabled className="w-full h-14 bg-surface-base text-muted shadow-none">
+            <Button
+              disabled
+              className="w-full h-14 bg-surface-base text-muted shadow-none"
+            >
               Sold Out
             </Button>
           ) : itemInCart ? (
-            <Button onClick={onRemove} variant="outline" className="w-full h-14 gap-2 text-danger hover:text-danger hover:border-danger hover:bg-danger/5">
+            <Button
+              onClick={onRemove}
+              variant="outline"
+              className="w-full h-14 gap-2 text-danger hover:text-danger hover:border-danger hover:bg-danger/5"
+            >
               <HiOutlineTrash className="text-xl" />
               Remove from Cart
             </Button>
           ) : (
-            <Button onClick={handleAdd} variant="primary" className="w-full h-14 gap-2 shadow-primary/30 text-lg">
+            <Button
+              onClick={handleAdd}
+              variant="primary"
+              className="w-full h-14 gap-2 shadow-primary/30 text-lg"
+            >
               <RiShoppingBagLine className="text-xl" />
               Add to Cart
             </Button>
