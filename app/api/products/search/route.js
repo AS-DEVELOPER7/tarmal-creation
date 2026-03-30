@@ -13,7 +13,6 @@ export async function GET(req) {
 
   // Fallback to 'categories' parameter if present to match old structure
   let category = url.searchParams.get("category") || url.searchParams.get("categories");
-  let styles = url.searchParams.get("styles");
   let materials = url.searchParams.get("materials");
   let sizes = url.searchParams.get("sizes");
   let colors = url.searchParams.get("colors");
@@ -21,7 +20,6 @@ export async function GET(req) {
   const maxPrice = url.searchParams.get("maxPrice");
   const sort = url.searchParams.get("sort");
 
-  try { if (styles) styles = JSON.parse(styles); } catch(e){}
   try { if (materials) materials = JSON.parse(materials); } catch(e){}
   try { if (sizes) sizes = JSON.parse(sizes); } catch(e){}
   try { if (colors) colors = JSON.parse(colors); } catch(e){}
@@ -34,9 +32,6 @@ export async function GET(req) {
     query = query.contains("categories", JSON.stringify([category]));
   }
 
-  if (styles && Array.isArray(styles) && styles.length > 0) {
-    query = query.contains("styles", JSON.stringify(styles));
-  }
 
   if (materials && Array.isArray(materials) && materials.length > 0) {
     query = query.contains("materials", JSON.stringify(materials));

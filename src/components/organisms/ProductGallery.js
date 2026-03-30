@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ImageWithFallback from "../molecules/ImageWithFallback";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -21,9 +21,15 @@ export default function ProductGallery({
     setZoomPos({ x, y });
   };
 
-  const images = selectedVariant?.images?.length
-    ? selectedVariant.images
-    : product?.images || [];
+  const images = useMemo(() => {
+    if (selectedVariant?.selectedColor?.images?.length)
+      return selectedVariant.selectedColor.images;
+    if (selectedVariant?.images?.length) return selectedVariant.images;
+    if (selectedVariant?.selectedStyle?.images?.length)
+      return selectedVariant.selectedStyle.images;
+    return product?.images || [];
+  }, [selectedVariant, product]);
+
   const mainImg = images[activeIdx] || images[0];
 
   useEffect(() => {
@@ -33,7 +39,7 @@ export default function ProductGallery({
     <div className="flex flex-col gap-6 w-full">
       {/* Main Image */}
       <div
-        className="relative group overflow-hidden rounded-2xl aspect-square sm:aspect-square bg-surface-base w-full shadow-sm cursor-zoom-in"
+        className="relative group overflow-hidden rounded-2xl aspect-square sm:aspect-square bg-surface-base w-full h-[400px] sm:h-[500px] shadow-sm cursor-zoom-in"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsZooming(true)}
         onMouseLeave={() => setIsZooming(false)}
@@ -75,7 +81,7 @@ export default function ProductGallery({
 
       {/* Thumbnails */}
       {images.length > 1 && (
-        <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
+        <div className="grid grid-cols-7  gap-3">
           {images.map((src, i) => (
             <button
               key={i}

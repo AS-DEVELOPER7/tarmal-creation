@@ -71,7 +71,7 @@ export default function ProductCard({ product }) {
       {/* Image Container */}
       <Link
         href={`/product/${id}`}
-        className="relative aspect-4/5 overflow-hidden rounded-2xl bg-surface-base mb-4 block"
+        className="relative aspect-4/5 overflow-hidden rounded-2xl bg-surface-base mb-4  block"
       >
         <ImageWithFallback
           src={image}

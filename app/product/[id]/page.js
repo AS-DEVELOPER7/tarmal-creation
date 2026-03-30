@@ -36,10 +36,15 @@ export default function ProductDetails() {
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
-    setSelectedVariant(defaultVariant);
+    const defaultV = product?.variants?.[0] || null;
+    if (defaultV && defaultV.style && defaultV.colors?.length) {
+      setSelectedVariant({ ...defaultV, selectedStyle: defaultV, selectedColor: defaultV.colors[0] });
+    } else {
+      setSelectedVariant(defaultV);
+    }
     setSelectedSize(defaultSize);
     setQty(1);
-  }, [product?.id, defaultVariant, defaultSize]);
+  }, [product?.id, defaultSize]);
 
   const [searchProducts, { data: relatedProductsData }] =
     useLazySearchProductsQuery();
@@ -75,17 +80,22 @@ export default function ProductDetails() {
   const itemInCart = cart.find(
     (i) =>
       i.id === product.id &&
-      i.color === (selectedVariant?.color || null) &&
+      i.style === (selectedVariant?.style || null) &&
+      i.color === (selectedVariant?.selectedColor?.color || selectedVariant?.color || null) &&
       i.size === (selectedSize || null),
   );
 
   const handleAdd = () => {
-    const mainImg = selectedVariant?.images?.[0] || product?.images?.[0];
+    const mainImg = selectedVariant?.selectedColor?.images?.[0] || 
+                    selectedVariant?.images?.[0] || 
+                    selectedVariant?.selectedStyle?.images?.[0] || 
+                    product?.images?.[0];
     dispatch(
       addToCart({
         id: product.id,
         name: product.title,
-        color: selectedVariant?.color || null,
+        style: selectedVariant?.style || null,
+        color: selectedVariant?.selectedColor?.color || selectedVariant?.color || null,
         size: selectedSize || null,
         image: mainImg,
         price: product.price,

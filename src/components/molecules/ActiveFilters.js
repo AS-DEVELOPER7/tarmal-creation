@@ -15,11 +15,6 @@ export default function ActiveFilters({ appliedFilters }) {
           {m}
         </span>
       ))}
-      {appliedFilters.styles?.map((s) => (
-        <span key={s} className="px-3 py-1 rounded-full bg-surface-base text-sm text-muted border border-border">
-          {s}
-        </span>
-      ))}
     </div>
   );
 }

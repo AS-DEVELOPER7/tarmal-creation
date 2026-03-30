@@ -54,16 +54,7 @@ export default function ProductInfo({
             {m}
           </span>
         ))}
-        {product.styles?.map((s) => (
-          <span
-            key={s}
-            className="text-xs font-medium uppercase tracking-widest px-4 py-1.5 rounded-full bg-surface-base text-muted border border-border"
-          >
-            {s}
-          </span>
-        ))}
       </div>
-
       {/* Description */}
       {product.description && (
         <p className="text-muted text-lg leading-relaxed mb-10 font-light">
@@ -71,51 +62,90 @@ export default function ProductInfo({
         </p>
       )}
 
-      {/* Variants / Colors */}
-      {product.variants?.length > 0 && (
+      {/* Styles Selection */}
+      {product.variants?.some((v) => v.style) && (
         <div className="mb-8">
           <label className="text-sm font-semibold uppercase tracking-widest text-muted mb-4 block">
-            Select Color
+            Select Style
           </label>
-          <div className="flex flex-wrap gap-4">
-            {product.variants.map((v) => {
-              const isArrayColor = Array.isArray(v.color);
-              const colorLabel = isArrayColor ? v.color.join(" / ") : v.color;
-
-              const backgroundStyle = isArrayColor
-                ? {
-                    background: `conic-gradient(${v.color
-                      .map((c, i) => {
-                        const start = (i * 360) / v.color.length;
-                        const end = ((i + 1) * 360) / v.color.length;
-                        return `${c.toLowerCase()} ${start}deg ${end}deg`;
-                      })
-                      .join(", ")})`,
-                  }
-                : { backgroundColor: v.color.toLowerCase() };
-
-              return (
-                <button
-                  key={colorLabel}
-                  onClick={() => onSelectVariant(v)}
-                  className={`flex items-center gap-3 p-2 pr-4 rounded-full border transition-all duration-300 ${
-                    JSON.stringify(selectedVariant?.color) ===
-                    JSON.stringify(v.color)
-                      ? "border-primary bg-surface shadow-sm ring-1 ring-primary/20"
-                      : "border-border hover:border-primary/50 bg-transparent"
-                  }`}
-                >
-                  <span
-                    className="w-6 h-6 rounded-full border border-black/10 shadow-inner"
-                    style={backgroundStyle}
-                  />
-                  <span className="text-sm font-medium">{colorLabel}</span>
-                </button>
-              );
-            })}
+          <div className="flex flex-wrap gap-3">
+            {product.variants.map((v, idx) => (
+              <button
+                key={v.style || idx}
+                onClick={() => onSelectVariant({ ...v, selectedStyle: v })}
+                className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 ${
+                  selectedVariant?.style === v.style
+                    ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
+                    : "border-border hover:border-primary/50 text-muted bg-transparent"
+                }`}
+              >
+                {v.style}
+              </button>
+            ))}
           </div>
         </div>
       )}
+
+      {/* Colors Selection (Nested or Direct) */}
+      {(() => {
+        const colorsToShow = selectedVariant?.colors || 
+          (!product.variants?.some(v => v.style) ? product.variants : null);
+
+        if (!colorsToShow?.length) return null;
+
+        return (
+          <div className="mb-8">
+            <label className="text-sm font-semibold uppercase tracking-widest text-muted mb-4 block">
+              Select Color
+            </label>
+            <div className="flex flex-wrap gap-4">
+              {colorsToShow.map((c, idx) => {
+                const isArrayColor = Array.isArray(c.color);
+                const colorLabel = isArrayColor ? c.color.join(" / ") : c.color;
+
+                const backgroundStyle = isArrayColor
+                  ? {
+                      background: `conic-gradient(${c.color
+                        .map((colorName, i) => {
+                          const start = (i * 360) / c.color.length;
+                          const end = ((i + 1) * 360) / c.color.length;
+                          return `${colorName.toLowerCase()} ${start}deg ${end}deg`;
+                        })
+                        .join(", ")})`,
+                    }
+                  : { backgroundColor: (c.color || "").toLowerCase() };
+
+                const isSelected = selectedVariant?.selectedColor?.color === c.color || 
+                                   (!selectedVariant?.selectedColor && selectedVariant?.color === c.color);
+
+                return (
+                  <button
+                    key={colorLabel || idx}
+                    onClick={() => {
+                      if (selectedVariant?.style) {
+                        onSelectVariant({ ...selectedVariant, selectedColor: c });
+                      } else {
+                        onSelectVariant(c);
+                      }
+                    }}
+                    className={`flex items-center gap-3 p-2 pr-4 rounded-full border transition-all duration-300 ${
+                      isSelected
+                        ? "border-primary bg-surface shadow-sm ring-1 ring-primary/20"
+                        : "border-border hover:border-primary/50 bg-transparent"
+                    }`}
+                  >
+                    <span
+                      className="w-6 h-6 rounded-full border border-black/10 shadow-inner"
+                      style={backgroundStyle}
+                    />
+                    {colorLabel && <span className="text-sm font-medium">{colorLabel}</span>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Sizes */}
       {product.sizes?.length > 0 && (

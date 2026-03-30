@@ -7,13 +7,12 @@ export async function GET() {
   try {
     const { data: products, error } = await supabase
       .from("products")
-      .select("categories, materials, styles, price");
+      .select("categories, materials, price");
 
     if (error) throw error;
 
     const categoriesSet = new Set();
     const materialsSet = new Set();
-    const stylesSet = new Set();
 
     let minPrice = Infinity;
     let maxPrice = -Infinity;
@@ -21,7 +20,6 @@ export async function GET() {
     products.forEach((p) => {
       p.categories?.forEach((c) => categoriesSet.add(c));
       p.materials?.forEach((m) => materialsSet.add(m));
-      p.styles?.forEach((s) => stylesSet.add(s));
 
       if (p.price != null) {
         minPrice = Math.min(minPrice, p.price);
@@ -33,7 +31,6 @@ export async function GET() {
       JSON.stringify({
         categories: Array.from(categoriesSet),
         materials: Array.from(materialsSet),
-        styles: Array.from(stylesSet),
         minPrice: isFinite(minPrice) ? minPrice : 0,
         maxPrice: isFinite(maxPrice) ? maxPrice : 0,
       }),

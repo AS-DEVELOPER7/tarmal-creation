@@ -22,7 +22,9 @@ export default function ImageWithFallback({
         style={fill ? { width: "100%", height: "100%" } : { width, height }}
       >
         <HiOutlinePhotograph className="text-3xl" />
-        <span className="text-[10px] mt-1 font-medium tracking-tighter uppercase opacity-50">No Image</span>
+        <span className="text-[10px] mt-1 font-medium tracking-tighter uppercase opacity-50">
+          No Image
+        </span>
       </div>
     );
   }

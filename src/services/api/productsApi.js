@@ -24,7 +24,6 @@ export const productsApi = createApi({
         const query = new URLSearchParams();
         if (params.category) query.append("category", params.category);
         if (params.materials) query.append("materials", params.materials);
-        if (params.styles) query.append("styles", params.styles);
         if (params.sizes) query.append("sizes", params.sizes);
         if (params.colors) query.append("colors", params.colors);
         if (params.maxPrice) query.append("maxPrice", params.maxPrice);

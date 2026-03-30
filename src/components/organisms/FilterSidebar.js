@@ -11,8 +11,6 @@ export default function FilterSidebar({
   setFilterCategory,
   filterMaterials,
   setFilterMaterials,
-  filterStyles,
-  setFilterStyles,
   filterMaxPrice,
   setFilterMaxPrice,
   applyFilters,
@@ -78,25 +76,6 @@ export default function FilterSidebar({
           </div>
         </div>
 
-        {/* Styles */}
-        <div>
-          <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted">Styles</p>
-          <div className="flex flex-wrap gap-2">
-            {facets?.styles?.map((s) => (
-              <button
-                key={s}
-                onClick={() => toggleArrayValue(filterStyles, s, setFilterStyles)}
-                className={`px-4 py-2 rounded-lg text-sm transition ${
-                  filterStyles.includes(s)
-                    ? "bg-primary text-white shadow-md shadow-primary/20 font-medium"
-                    : "bg-surface-base text-muted hover:bg-surface-base border border-transparent hover:border-primary hover:text-primary"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* Max Price */}
         <div>
