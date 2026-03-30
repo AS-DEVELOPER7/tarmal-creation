@@ -13,6 +13,7 @@ import {
 import ProductGallery from "src/components/organisms/ProductGallery";
 import ProductInfo from "src/components/organisms/ProductInfo";
 import RelatedProducts from "src/components/organisms/RelatedProducts";
+import { CURRENCY } from "src/constants";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -38,7 +39,11 @@ export default function ProductDetails() {
   useEffect(() => {
     const defaultV = product?.variants?.[0] || null;
     if (defaultV && defaultV.style && defaultV.colors?.length) {
-      setSelectedVariant({ ...defaultV, selectedStyle: defaultV, selectedColor: defaultV.colors[0] });
+      setSelectedVariant({
+        ...defaultV,
+        selectedStyle: defaultV,
+        selectedColor: defaultV.colors[0],
+      });
     } else {
       setSelectedVariant(defaultV);
     }
@@ -81,21 +86,28 @@ export default function ProductDetails() {
     (i) =>
       i.id === product.id &&
       i.style === (selectedVariant?.style || null) &&
-      i.color === (selectedVariant?.selectedColor?.color || selectedVariant?.color || null) &&
+      i.color ===
+        (selectedVariant?.selectedColor?.color ||
+          selectedVariant?.color ||
+          null) &&
       i.size === (selectedSize || null),
   );
 
   const handleAdd = () => {
-    const mainImg = selectedVariant?.selectedColor?.images?.[0] || 
-                    selectedVariant?.images?.[0] || 
-                    selectedVariant?.selectedStyle?.images?.[0] || 
-                    product?.images?.[0];
+    const mainImg =
+      selectedVariant?.selectedColor?.images?.[0] ||
+      selectedVariant?.images?.[0] ||
+      selectedVariant?.selectedStyle?.images?.[0] ||
+      product?.images?.[0];
     dispatch(
       addToCart({
         id: product.id,
         name: product.title,
         style: selectedVariant?.style || null,
-        color: selectedVariant?.selectedColor?.color || selectedVariant?.color || null,
+        color:
+          selectedVariant?.selectedColor?.color ||
+          selectedVariant?.color ||
+          null,
         size: selectedSize || null,
         image: mainImg,
         price: product.price,
@@ -179,9 +191,9 @@ export default function ProductDetails() {
                   Shipping & Returns
                 </h4>
                 <p className="text-muted text-sm leading-relaxed">
-                  Complimentary express shipping on all orders over 200 INR.
-                  Returns accepted within 30 days of delivery in original
-                  condition via our returns portal.
+                  Complimentary express shipping on all orders over 200{" "}
+                  {CURRENCY}. Returns accepted within 30 days of delivery in
+                  original condition via our returns portal.
                 </p>
               </div>
               <div className="bg-surface-base p-8 rounded-2xl">

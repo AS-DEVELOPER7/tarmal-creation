@@ -2,6 +2,7 @@
 
 import { RiCloseLine } from "react-icons/ri";
 import Button from "../atoms/Button";
+import { CURRENCY } from "src/constants";
 
 export default function FilterSidebar({
   openFilters,
@@ -38,7 +39,9 @@ export default function FilterSidebar({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Category */}
         <div>
-          <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted">Category</p>
+          <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted">
+            Category
+          </p>
           <div className="flex flex-wrap gap-2">
             {facets?.categories?.map((cat) => (
               <button
@@ -58,12 +61,16 @@ export default function FilterSidebar({
 
         {/* Materials */}
         <div>
-          <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted">Materials</p>
+          <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted">
+            Materials
+          </p>
           <div className="flex flex-wrap gap-2">
             {facets?.materials?.map((m) => (
               <button
                 key={m}
-                onClick={() => toggleArrayValue(filterMaterials, m, setFilterMaterials)}
+                onClick={() =>
+                  toggleArrayValue(filterMaterials, m, setFilterMaterials)
+                }
                 className={`px-4 py-2 rounded-lg text-sm transition ${
                   filterMaterials.includes(m)
                     ? "bg-primary text-white shadow-md shadow-primary/20 font-medium"
@@ -76,10 +83,11 @@ export default function FilterSidebar({
           </div>
         </div>
 
-
         {/* Max Price */}
         <div>
-          <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted">Max Price</p>
+          <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted">
+            Max Price
+          </p>
           <input
             type="range"
             min={facets?.minPrice || 10}
@@ -90,17 +98,29 @@ export default function FilterSidebar({
             className="w-full accent-primary"
           />
           <div className="flex justify-between mt-2">
-            <span className="text-sm font-medium text-muted">${facets?.minPrice || 10}</span>
-            <span className="text-sm font-bold text-primary">${filterMaxPrice}</span>
+            <span className="text-sm font-medium text-muted">
+              {facets?.minPrice || 10} {CURRENCY}
+            </span>
+            <span className="text-sm font-bold text-primary">
+              {filterMaxPrice} {CURRENCY}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="mt-8 pt-6 border-t border-border flex justify-end gap-4">
-        <Button onClick={clearFilters} variant="outline" className="px-6 rounded-lg">
+        <Button
+          onClick={clearFilters}
+          variant="outline"
+          className="px-6 rounded-lg"
+        >
           Clear All
         </Button>
-        <Button onClick={applyFilters} variant="primary" className="px-8 rounded-lg shadow-primary/30">
+        <Button
+          onClick={applyFilters}
+          variant="primary"
+          className="px-8 rounded-lg shadow-primary/30"
+        >
           Apply Filters
         </Button>
       </div>

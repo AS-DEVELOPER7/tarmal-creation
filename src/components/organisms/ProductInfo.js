@@ -6,6 +6,7 @@ import QuantitySelector from "../molecules/QuantitySelector";
 import { RiShoppingBagLine } from "react-icons/ri";
 import { HiOutlineTrash } from "react-icons/hi2";
 import { motion } from "framer-motion";
+import { CURRENCY } from "src/constants";
 
 export default function ProductInfo({
   product,
@@ -40,7 +41,7 @@ export default function ProductInfo({
           {product.title}
         </h1>
         <div className="text-2xl font-display font-medium text-primary mt-4 mb-6">
-          {product.price?.toFixed(2)} INR
+          {product.price?.toFixed(2)} {CURRENCY}
         </div>
       </motion.div>
 
@@ -88,8 +89,9 @@ export default function ProductInfo({
 
       {/* Colors Selection (Nested or Direct) */}
       {(() => {
-        const colorsToShow = selectedVariant?.colors || 
-          (!product.variants?.some(v => v.style) ? product.variants : null);
+        const colorsToShow =
+          selectedVariant?.colors ||
+          (!product.variants?.some((v) => v.style) ? product.variants : null);
 
         if (!colorsToShow?.length) return null;
 
@@ -115,15 +117,20 @@ export default function ProductInfo({
                     }
                   : { backgroundColor: (c.color || "").toLowerCase() };
 
-                const isSelected = selectedVariant?.selectedColor?.color === c.color || 
-                                   (!selectedVariant?.selectedColor && selectedVariant?.color === c.color);
+                const isSelected =
+                  selectedVariant?.selectedColor?.color === c.color ||
+                  (!selectedVariant?.selectedColor &&
+                    selectedVariant?.color === c.color);
 
                 return (
                   <button
                     key={colorLabel || idx}
                     onClick={() => {
                       if (selectedVariant?.style) {
-                        onSelectVariant({ ...selectedVariant, selectedColor: c });
+                        onSelectVariant({
+                          ...selectedVariant,
+                          selectedColor: c,
+                        });
                       } else {
                         onSelectVariant(c);
                       }
@@ -138,7 +145,9 @@ export default function ProductInfo({
                       className="w-6 h-6 rounded-full border border-black/10 shadow-inner"
                       style={backgroundStyle}
                     />
-                    {colorLabel && <span className="text-sm font-medium">{colorLabel}</span>}
+                    {colorLabel && (
+                      <span className="text-sm font-medium">{colorLabel}</span>
+                    )}
                   </button>
                 );
               })}
