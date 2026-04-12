@@ -1,5 +1,7 @@
 "use client";
 
+import { CONTACT_INFO } from "src/constants";
+
 export default function PaymentOptions({
   setPayMethod,
   payMethod,
@@ -8,7 +10,7 @@ export default function PaymentOptions({
 }) {
   return (
     <>
-      <h2 className="text-3xl md:text-4xl font-black">Payment Method</h2>
+      <h2 className="text-2xl md:text-3xl font-black">Payment Method</h2>
 
       {/* WhatsApp */}
       <button
@@ -41,7 +43,7 @@ export default function PaymentOptions({
               WhatsApp number:
               <span className="text-primary font-semibold">
                 {" "}
-                +1 (555) 123-4567
+                {CONTACT_INFO.PHONE}
               </span>
               .
             </li>
@@ -62,7 +64,7 @@ export default function PaymentOptions({
         </button>
         <button
           onClick={goNextFromPayment}
-          className="h-11 px-6 rounded-xl text-white font-bold bg-primary hover:opacity-90"
+          className="h-11 px-6 rounded-xl text-xs text-white font-bold bg-primary hover:opacity-90"
         >
           Continue to Review
         </button>

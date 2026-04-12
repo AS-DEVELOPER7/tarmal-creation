@@ -112,14 +112,14 @@ export default function FilterSidebar({
         <Button
           onClick={clearFilters}
           variant="outline"
-          className="px-6 rounded-lg"
+          className="px-4 sm:px-6 text-sm sm:text-base rounded-lg"
         >
           Clear All
         </Button>
         <Button
           onClick={applyFilters}
           variant="primary"
-          className="px-8 rounded-lg shadow-primary/30"
+          className="px-4 sm:px-8 text-sm sm:text-base rounded-lg shadow-primary/30"
         >
           Apply Filters
         </Button>

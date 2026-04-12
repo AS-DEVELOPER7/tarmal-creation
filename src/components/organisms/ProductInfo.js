@@ -36,36 +36,39 @@ export default function ProductInfo({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="space-y-5 mb-5"
       >
-        <h1 className="text-4xl sm:text-5xl font-serif font-medium leading-tight mb-2 text-base">
+        <h1 className="text-3xl sm:text-4xl font-serif font-medium leading-tight  text-base">
           {product.title}
         </h1>
-        <div className="text-2xl font-display font-medium text-primary mt-4 mb-6">
+        <div className="text-xl font-display font-medium text-primary ">
           {(selectedSize?.price ?? product.price)?.toFixed(2)} {CURRENCY}
         </div>
       </motion.div>
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {product.materials?.map((m) => (
-          <span
-            key={m}
-            className="text-xs font-medium uppercase tracking-widest px-4 py-1.5 rounded-full bg-surface-base text-muted border border-border"
-          >
-            {m}
-          </span>
-        ))}
-      </div>
+      {product.materials?.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-5">
+          {product.materials?.map((m) => (
+            <span
+              key={m}
+              className="text-xs font-medium uppercase tracking-widest px-4 py-1.5 rounded-full bg-surface-base text-muted border border-border"
+            >
+              {m}
+            </span>
+          ))}
+        </div>
+      )}
       {/* Description */}
       {product.description && (
-        <p className="text-muted text-lg leading-relaxed mb-10 font-light">
+        <p className="text-muted text-sm leading-relaxed mb-5 font-light">
           {product.description}
         </p>
       )}
 
       {/* Styles Selection */}
       {product.variants?.some((v) => v.style) && (
-        <div className="mb-8">
+        <div>
           <label className="text-sm font-semibold uppercase tracking-widest text-muted mb-4 block">
             Select Style
           </label>
@@ -74,7 +77,7 @@ export default function ProductInfo({
               <button
                 key={v.style || idx}
                 onClick={() => onSelectVariant({ ...v, selectedStyle: v })}
-                className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 ${
+                className={`px-4 sm:px-6 py-1 sm:py-2 rounded-full border text-xs sm:text-sm font-medium transition-all duration-300 ${
                   selectedVariant?.style === v.style
                     ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
                     : "border-border hover:border-primary/50 text-muted bg-transparent"
@@ -96,8 +99,8 @@ export default function ProductInfo({
         if (!colorsToShow?.length) return null;
 
         return (
-          <div className="mb-8">
-            <label className="text-sm font-semibold uppercase tracking-widest text-muted mb-4 block">
+          <div>
+            <label className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-muted mb-4 block">
               Select Color
             </label>
             <div className="flex flex-wrap gap-4">
@@ -142,11 +145,13 @@ export default function ProductInfo({
                     }`}
                   >
                     <span
-                      className="w-6 h-6 rounded-full border border-black/10 shadow-inner"
+                      className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-black/10 shadow-inner"
                       style={backgroundStyle}
                     />
                     {colorLabel && (
-                      <span className="text-sm font-medium">{colorLabel}</span>
+                      <span className="text-xs sm:text-sm font-medium">
+                        {colorLabel}
+                      </span>
                     )}
                   </button>
                 );
@@ -158,8 +163,8 @@ export default function ProductInfo({
 
       {/* Sizes */}
       {product.sizes?.length > 0 && (
-        <div className="mb-8">
-          <label className="text-sm font-semibold uppercase tracking-widest text-muted mb-4 block">
+        <div>
+          <label className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-muted mb-4 block">
             Select Size
           </label>
           <div className="flex flex-wrap gap-3">
@@ -174,7 +179,7 @@ export default function ProductInfo({
                 <button
                   key={sizeLabel}
                   onClick={() => onSelectSize(s)}
-                  className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 ${
+                  className={`px-4 sm:px-6 py-1 sm:py-2 rounded-full border text-xs sm:text-sm font-medium transition-all duration-300 ${
                     isSelected
                       ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
                       : "border-border hover:border-primary/50 text-muted bg-transparent"
@@ -191,16 +196,16 @@ export default function ProductInfo({
       <div className="w-full h-px bg-border my-8" />
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-6 mt-4">
+      <div className="flex flex-col sm:flex-row gap-6 ">
         <div className="w-full sm:w-[140px] shrink-0">
-          <label className="text-sm font-semibold uppercase tracking-widest text-muted mb-3 block">
+          <label className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-muted mb-3 block">
             Quantity
           </label>
           <QuantitySelector
             quantity={qty}
             onIncrement={() => setQty((q) => Math.min(99, q + 1))}
             onDecrement={() => setQty((q) => Math.max(1, q - 1))}
-            className="h-14"
+            className="h-10 sm:h-14"
           />
         </div>
 
@@ -208,7 +213,7 @@ export default function ProductInfo({
           {product.sold_out ? (
             <Button
               disabled
-              className="w-full h-14 bg-surface-base text-muted shadow-none"
+              className="w-full h-10 sm:h-14 bg-surface-base text-muted shadow-none"
             >
               Sold Out
             </Button>
@@ -216,18 +221,18 @@ export default function ProductInfo({
             <Button
               onClick={onRemove}
               variant="outline"
-              className="w-full h-14 gap-2 text-danger hover:text-danger hover:border-danger hover:bg-danger/5"
+              className="w-full h-10 sm:h-14 gap-2 text-danger hover:text-danger hover:border-danger hover:bg-danger/5"
             >
-              <HiOutlineTrash className="text-xl" />
+              <HiOutlineTrash className="text-lg sm:text-xl" />
               Remove from Cart
             </Button>
           ) : (
             <Button
               onClick={handleAdd}
               variant="primary"
-              className="w-full h-14 gap-2 shadow-primary/30 text-lg"
+              className="w-full h-10 sm:h-14 gap-2 shadow-primary/30 text-md sm:text-lg"
             >
-              <RiShoppingBagLine className="text-xl" />
+              <RiShoppingBagLine className="text-lg sm:text-xl" />
               Add to Cart
             </Button>
           )}

@@ -13,7 +13,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border px-4 sm:px-10 py-3 bg-surface/90 backdrop-blur-md">
       <Link href="/" className="flex items-center gap-2 text-primary">
         <Image src="/logo.png" alt="Logo" width={50} height={50} />
-        <h2 className="text-lg font-bold font-serif text-base">
+        <h2 className="text-xs sm:text-lg font-bold font-serif text-base">
           Tarmal Creation
         </h2>
       </Link>

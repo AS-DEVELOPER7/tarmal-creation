@@ -7,7 +7,7 @@ import ContactForm from "src/components/organisms/ContactForm";
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-bg text-base">
+    <main className="min-h-screen bg-bg text-sm sm:text-base">
       {/* Top bar (optional breadcrumb / back) */}
       <div className="container mx-auto px-4 sm:px-6 pt-8">
         <Link
@@ -22,7 +22,7 @@ export default function ContactPage() {
       {/* Title */}
       <section className="container mx-auto px-4 sm:px-6 py-10 sm:py-14">
         <div className="text-center max-w-2xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl font-serif font-extrabold tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-serif font-extrabold tracking-tight">
             Get in Touch
           </h1>
           <p className="mt-3 text-muted">
@@ -33,7 +33,7 @@ export default function ContactPage() {
       </section>
 
       {/* Content */}
-      <section className="container mx-auto px-4 sm:px-6 pb-16">
+      <section className="container mx-auto px-4 sm:px-6 ">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Form */}
           <ContactForm />

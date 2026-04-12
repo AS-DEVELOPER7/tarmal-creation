@@ -3,7 +3,7 @@ import { CATEGORY_KEYS } from "./index";
 export const CATEGORY_LIST = [
   {
     name: CATEGORY_KEYS.BRACELETS,
-    img: "https://res.cloudinary.com/dmdpfxtui/image/upload/v1774534809/WhatsApp_Image_2026-03-26_at_11.16.54_ub9bi2.jpg",
+    img: "https://res.cloudinary.com/dmdpfxtui/image/upload/v1775983961/WhatsApp_Image_2026-04-12_at_11.02.12_rjoi7t.jpg",
   },
   {
     name: CATEGORY_KEYS.NECKLACE,
@@ -19,7 +19,7 @@ export const CATEGORY_LIST = [
   },
   {
     name: CATEGORY_KEYS.TASBEEH,
-    img: "https://res.cloudinary.com/dmdpfxtui/image/upload/v1774866278/WhatsApp_Image_2026-03-30_at_11.53.23_ia3jql.jpg",
+    img: "https://res.cloudinary.com/dmdpfxtui/image/upload/v1775985419/WhatsApp_Image_2026-04-12_at_11.02.12_1_ynjnbc.jpg",
   },
   {
     name: CATEGORY_KEYS.TACHNI,

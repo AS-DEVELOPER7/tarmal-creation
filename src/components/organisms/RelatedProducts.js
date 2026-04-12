@@ -9,9 +9,11 @@ export default function RelatedProducts({ related }) {
   if (!related || related.length === 0) return null;
 
   return (
-    <section className="max-w-7xl mx-auto mt-24 mb-16 px-4">
+    <section className="max-w-7xl mx-auto mt-8 mb-8 px-4">
       <div className="text-center mb-12">
-        <h3 className="text-3xl font-serif font-medium">You Might Also Like</h3>
+        <h3 className="text-xl sm:text-3xl font-serif font-medium">
+          You Might Also Like
+        </h3>
         <div className="w-16 h-1 bg-primary mx-auto mt-6 rounded-full opacity-50" />
       </div>
 

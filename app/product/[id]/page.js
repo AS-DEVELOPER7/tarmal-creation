@@ -177,13 +177,13 @@ export default function ProductDetails() {
         </div>
 
         {/* Description / Extra Details Section */}
-        <div className="max-w-7xl mx-auto mt-24 pt-16 border-t border-border">
+        <div className="max-w-7xl mx-auto mt-8 pt-8 border-t border-border">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="md:col-span-1 border-b border-border md:border-none pb-4 md:pb-0">
-              <h3 className="font-serif text-2xl font-medium mb-4">
+              <h3 className="font-serif text-xl sm:text-2xl font-medium mb-4">
                 The Details
               </h3>
-              <p className="text-muted leading-relaxed font-light">
+              <p className="text-sm sm:text-base text-muted leading-relaxed font-light">
                 Designed for daily elegance, crafted with lasting materials.
                 Pair it with matching pieces in our collection for a refined
                 set.
@@ -192,20 +192,20 @@ export default function ProductDetails() {
 
             <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div className="bg-surface-base p-8 rounded-2xl">
-                <h4 className="font-semibold uppercase tracking-widest text-sm mb-4">
+                <h4 className="font-semibold uppercase tracking-widest text-xs sm:text-sm mb-4">
                   Shipping & Returns
                 </h4>
-                <p className="text-muted text-sm leading-relaxed">
-                  Complimentary express shipping on all orders over 200{" "}
-                  {CURRENCY}. Returns accepted within 30 days of delivery in
-                  original condition via our returns portal.
+                <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                  Returns accepted within 30 days of delivery in original
+                  condition via our returns portal and opening video is a must
+                  for any return.
                 </p>
               </div>
               <div className="bg-surface-base p-8 rounded-2xl">
-                <h4 className="font-semibold uppercase tracking-widest text-sm mb-4">
+                <h4 className="font-semibold uppercase tracking-widest text-xs sm:text-sm mb-4">
                   Care Guide
                 </h4>
-                <p className="text-muted text-sm leading-relaxed">
+                <p className="text-xs sm:text-sm text-muted leading-relaxed">
                   Gently wipe with a soft cloth after wear to retain its
                   brilliant shine. Store in the provided pouch in a cool, dry
                   place. Avoid contact with perfumes and lotions.

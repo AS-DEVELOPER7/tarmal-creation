@@ -13,7 +13,7 @@ export default function ContactInfo() {
           <div className="mt-1 h-10 w-10 grid place-items-center rounded-full bg-primary/10 text-primary">
             <LuMail />
           </div>
-          <div>
+          <div className="flex-1">
             <p className="font-semibold">Email</p>
             <a
               href={`mailto:${CONTACT_INFO.EMAIL}`}
@@ -27,7 +27,7 @@ export default function ContactInfo() {
           <div className="mt-1 h-10 w-10 grid place-items-center rounded-full bg-primary/10 text-primary">
             <LuPhoneCall />
           </div>
-          <div>
+          <div className="flex-1">
             <p className="font-semibold">Phone</p>
             <a
               href={`tel:${CONTACT_INFO.PHONE}`}
@@ -41,7 +41,7 @@ export default function ContactInfo() {
           <div className="mt-1 h-10 w-10 grid place-items-center rounded-full bg-primary/10 text-primary">
             <FaMapMarker />
           </div>
-          <div>
+          <div className="flex-1">
             <p className="font-semibold">Studio</p>
             <p className="text-muted">{CONTACT_INFO.ADDRESS}</p>
           </div>

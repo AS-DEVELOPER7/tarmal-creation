@@ -19,13 +19,13 @@ export default function FeaturedProducts() {
   }, [fetchFeatured]);
 
   return (
-    <section className="py-20 sm:py-32 bg-bg px-4">
+    <section className="py-10 sm:py-20 bg-bg px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <span className="text-primary font-display uppercase tracking-widest text-sm font-semibold">
+        <div className="text-center mb-8">
+          <span className="text-primary font-display uppercase tracking-widest text-xs sm:text-sm font-semibold">
             Exquisite Pieces
           </span>
-          <h2 className="text-4xl sm:text-5xl font-serif font-medium mt-4">
+          <h2 className="text-2xl sm:text-5xl font-serif font-medium mt-4">
             Our Most Loved
           </h2>
         </div>

@@ -2,7 +2,11 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RiFilter3Line, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
+import {
+  RiFilter3Line,
+  RiArrowLeftSLine,
+  RiArrowRightSLine,
+} from "react-icons/ri";
 
 import SearchBar from "src/components/molecules/SearchBar";
 import FilterSidebar from "src/components/organisms/FilterSidebar";
@@ -10,7 +14,10 @@ import ProductGrid from "src/components/organisms/ProductGrid";
 import Pagination from "src/components/molecules/Pagination";
 import ActiveFilters from "src/components/molecules/ActiveFilters";
 import Button from "src/components/atoms/Button";
-import { useLazyGetFacetsQuery, useLazySearchProductsQuery } from "src/services/api/productsApi";
+import {
+  useLazyGetFacetsQuery,
+  useLazySearchProductsQuery,
+} from "src/services/api/productsApi";
 
 export default function ShopPage() {
   const { selectedCategory } = useSelector((s) => s.general) || {};
@@ -22,14 +29,16 @@ export default function ShopPage() {
   const [sortOrder, setSortOrder] = useState("default");
 
   // Local filter state (inside modal)
-  const [filterCategory, setFilterCategory] = useState(selectedCategory || "All");
+  const [filterCategory, setFilterCategory] = useState(
+    selectedCategory || "All",
+  );
   const [filterMaterials, setFilterMaterials] = useState([]);
   const [filterStyles, setFilterStyles] = useState([]);
   const [filterMaxPrice, setFilterMaxPrice] = useState(10000);
 
   // Applied filters for API
   const [appliedFilters, setAppliedFilters] = useState({
-    category: selectedCategory || "All"
+    category: selectedCategory || "All",
   });
 
   const [getFacets, { data: facets }] = useLazyGetFacetsQuery();
@@ -71,8 +80,11 @@ export default function ShopPage() {
   }, [queryParams, searchProducts]);
 
   const productsData = data || { data: [], pagination: {} };
-  
-  const totalPages = Math.max(1, Math.ceil((productsData?.pagination?.total || 0) / pageSize));
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil((productsData?.pagination?.total || 0) / pageSize),
+  );
   const applyFilters = () => {
     setAppliedFilters({
       category: filterCategory,
@@ -100,29 +112,29 @@ export default function ShopPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-bg text-base px-4 sm:px-8 py-16">
+    <main className="min-h-screen bg-bg text-base px-4 sm:px-8 py-10 sm:py-16">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl sm:text-5xl font-serif font-medium text-center mb-12">
+        <h1 className="text-2xl sm:text-3xl font-serif font-medium text-center mb-8">
           Shop Collections
         </h1>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center justify-between mb-8">
           <div className="w-full sm:max-w-md">
-            <SearchBar 
-              initialValue={search} 
-              onSearch={handleSearch} 
+            <SearchBar
+              initialValue={search}
+              onSearch={handleSearch}
               placeholder="Search by name, style, or material..."
             />
           </div>
-          
-          <div className="flex items-center gap-3 justify-between sm:justify-end w-full sm:w-auto">
-            <div className="flex items-center gap-2">
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between sm:justify-end w-full sm:w-auto">
+            <div className="flex items-center gap-2 ">
               <label htmlFor="sort" className="text-sm text-muted">
                 Sort:
               </label>
               <select
                 id="sort"
-                className="rounded-md border border-border bg-surface py-2 px-3 text-sm focus:ring-2 focus:ring-primary"
+                className="rounded-md border border-border w-full sm:w-auto bg-surface py-2 px-3 text-sm focus:ring-2 focus:ring-primary"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
               >
@@ -131,14 +143,16 @@ export default function ShopPage() {
                 <option value="highToLow">Price: High → Low</option>
               </select>
             </div>
-            
+
             <Button
               onClick={() => setOpenFilters((v) => !v)}
               variant="outline"
               className="gap-2"
             >
-              <RiFilter3Line className="text-xl" /> Filters
-              {(appliedFilters.category && appliedFilters.category !== "All") || appliedFilters.materials?.length || appliedFilters.styles?.length ? (
+              <RiFilter3Line className="text-xl " /> Filters
+              {(appliedFilters.category && appliedFilters.category !== "All") ||
+              appliedFilters.materials?.length ||
+              appliedFilters.styles?.length ? (
                 <span className="w-2 h-2 rounded-full bg-primary absolute top-2 right-2 sm:relative sm:top-0 sm:right-0" />
               ) : null}
             </Button>
@@ -163,16 +177,19 @@ export default function ShopPage() {
 
         <ActiveFilters appliedFilters={appliedFilters} />
 
-        <ProductGrid isLoading={isLoading || isFetching} products={productsData?.data} />
+        <ProductGrid
+          isLoading={isLoading || isFetching}
+          products={productsData?.data}
+        />
 
         {/* PAGINATION */}
-        <Pagination 
-          page={page} 
-          totalPages={totalPages} 
+        <Pagination
+          page={page}
+          totalPages={totalPages}
           setPage={(p) => {
             setPage(p);
             window.scrollTo({ top: 0, behavior: "smooth" });
-          }} 
+          }}
         />
       </div>
     </main>

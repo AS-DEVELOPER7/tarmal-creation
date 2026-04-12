@@ -16,7 +16,7 @@ export default function ReviewOrderDetails({
 }) {
   return (
     <>
-      <h2 className="text-3xl md:text-4xl font-black">Review Your Order</h2>
+      <h2 className="text-2xl md:text-3xl font-black">Review Your Order</h2>
 
       {/* Address */}
       <div className="rounded-2xl border border-border p-5 bg-surface">
@@ -99,7 +99,7 @@ export default function ReviewOrderDetails({
         <button
           onClick={placeOrder}
           disabled={sending}
-          className="h-11 px-6 rounded-xl text-white font-bold inline-flex items-center gap-2 bg-primary hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="h-11 px-6 rounded-xl text-xs text-white font-bold inline-flex items-center gap-2 bg-primary hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span>{sending ? "Placing Order..." : "Place Order"}</span>
           {!sending && <FaLock />}
