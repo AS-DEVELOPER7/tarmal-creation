@@ -24,6 +24,7 @@ import CheckoutSummary from "src/components/organisms/CheckoutSummary";
 import ShippingDetailsForm from "src/components/organisms/ShippingDetailsForm";
 import PaymentOptions from "src/components/organisms/PaymentOptions";
 import ReviewOrderDetails from "src/components/organisms/ReviewOrderDetails";
+import { WEB3FORMS_NEW_ORDER_ACCESS_KEY } from "src/config/config";
 
 export default function CheckoutPage() {
   const dispatch = useDispatch();
@@ -135,6 +136,12 @@ export default function CheckoutPage() {
     try {
       setSending(true);
 
+      const accessKey = WEB3FORMS_NEW_ORDER_ACCESS_KEY;
+      if (!accessKey) {
+        console.error("Missing NEXT_PUBLIC_WEB3FORMS_NEW_ORDER_ACCESS_KEY");
+        throw new Error("Configuration error: Missing API access key.");
+      }
+
       // 1. Prepare Order Details
       const itemsList = items
         .map((it) => {
@@ -157,10 +164,7 @@ export default function CheckoutPage() {
 
       // 2. Send Email via Web3Forms
       const formData = new FormData();
-      formData.append(
-        "access_key",
-        process.env.NEXT_PUBLIC_WEB3FORMS_NEW_ORDER_ACCESS_KEY,
-      );
+      formData.append("access_key", accessKey);
       formData.append("name", addr.name);
       formData.append("email", addr.email);
       formData.append(
@@ -178,7 +182,7 @@ export default function CheckoutPage() {
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error("Failed to send order notification");
+        throw new Error(data.message || "Failed to send order notification");
       }
 
       // 3. Open WhatsApp as well (as per current flow)
@@ -200,10 +204,21 @@ export default function CheckoutPage() {
       setTimeout(() => router.push("/"), 900);
     } catch (error) {
       console.error("Order error:", error);
+      let description = "We couldn't process your order. Please try again.";
+
+      // Detect if it's likely an ad-blocker or network issue
+      if (error instanceof TypeError && error.message.includes("fetch")) {
+        description =
+          "Network error. This is often caused by ad-blockers blocking our order system. Please disable them and try again.";
+      } else if (error.message) {
+        description = error.message;
+      }
+
       show({
         type: "error",
         title: "Submission failed",
-        description: "We couldn't process your order. Please try again.",
+        description,
+        duration: 8000, // Show for longer if it's an error
       });
     } finally {
       setSending(false);

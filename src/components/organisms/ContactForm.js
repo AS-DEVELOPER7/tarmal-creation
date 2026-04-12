@@ -5,6 +5,7 @@ import { FiUser, FiMail, FiSend } from "react-icons/fi";
 import Input from "../atoms/Input";
 import Button from "../atoms/Button";
 import TextArea from "../atoms/TextArea";
+import { WEB3FORMS_CONTACT_US_ACCESS_KEY } from "src/config/config";
 
 export default function ContactForm() {
   const initial = {
@@ -47,7 +48,7 @@ export default function ContactForm() {
 
       const formData = new FormData();
       // Using whichever key is available, but recommending NEXT_PUBLIC_ for client-side
-      const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_CONTACT_US_ACCESS_KEY;
+      const accessKey = WEB3FORMS_CONTACT_US_ACCESS_KEY;
 
       formData.append("access_key", accessKey);
       formData.append("name", values.name);
