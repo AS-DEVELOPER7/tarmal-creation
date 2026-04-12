@@ -2,6 +2,7 @@
 
 import { LuMail, LuPhoneCall } from "react-icons/lu";
 import { FaMapMarker } from "react-icons/fa";
+import { CONTACT_INFO } from "src/constants";
 
 export default function ContactInfo() {
   return (
@@ -15,10 +16,10 @@ export default function ContactInfo() {
           <div>
             <p className="font-semibold">Email</p>
             <a
-              href="mailto:hello@jewelrybyhand.com"
+              href={`mailto:${CONTACT_INFO.EMAIL}`}
               className="text-muted hover:text-primary"
             >
-              hello@jewelrybyhand.com
+              {CONTACT_INFO.EMAIL}
             </a>
           </div>
         </div>
@@ -28,8 +29,11 @@ export default function ContactInfo() {
           </div>
           <div>
             <p className="font-semibold">Phone</p>
-            <a href="tel:+1234567890" className="text-muted hover:text-primary">
-              +1 (234) 567-890
+            <a
+              href={`tel:${CONTACT_INFO.PHONE}`}
+              className="text-muted hover:text-primary"
+            >
+              {CONTACT_INFO.PHONE}
             </a>
           </div>
         </div>
@@ -39,9 +43,7 @@ export default function ContactInfo() {
           </div>
           <div>
             <p className="font-semibold">Studio</p>
-            <p className="text-muted">
-              San Francisco, CA (By appointment only)
-            </p>
+            <p className="text-muted">{CONTACT_INFO.ADDRESS}</p>
           </div>
         </div>
       </div>

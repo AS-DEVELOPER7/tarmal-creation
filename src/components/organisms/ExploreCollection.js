@@ -8,21 +8,28 @@ import { motion } from "framer-motion";
 
 export default function ExploreCollection() {
   const dispatch = useDispatch();
-  
+
   return (
     <section className="py-20 bg-surface-base/50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-col sm:flex-row justify-between items-end mb-12 gap-6">
-          <div>
-            <span className="text-primary font-display uppercase tracking-widest text-sm font-semibold">Curated for you</span>
-            <h2 className="text-4xl sm:text-5xl font-serif font-medium mt-4">Explore Collections</h2>
+        <div className="flex flex-col items-center sm:flex-row sm:justify-between sm:items-end mb-12 gap-6">
+          <div className="flex flex-col items-center sm:items-start">
+            <span className="text-primary font-display uppercase tracking-widest text-sm font-semibold">
+              Curated for you
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-serif font-medium mt-4">
+              Explore Collections
+            </h2>
           </div>
-          <Link href="/shop" className="text-primary font-medium hover:underline underline-offset-4 decoration-primary/30">
+          <Link
+            href="/shop"
+            className="text-primary self-end font-medium hover:underline underline-offset-4 decoration-primary/30"
+          >
             View All Categories →
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {CATEGORY_LIST.map((c, i) => (
             <motion.div
               initial={{ opacity: 0, y: 20 }}

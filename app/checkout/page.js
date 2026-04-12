@@ -15,6 +15,8 @@ import {
   SHIPPING_THRESHOLD,
   SHIPPING_COST,
   FREE_SHIPPING_CITY,
+  CONTACT_INFO,
+  WHATSAPP_NUMBER,
 } from "src/constants";
 
 import Stepper from "src/components/molecules/Stepper";
@@ -183,7 +185,10 @@ export default function CheckoutPage() {
       const encodedText = encodeURIComponent(
         `*New Order!*\n${fullOrderDetails}`,
       );
-      window.open(`https://wa.me/15551234567?text=${encodedText}`, "_blank");
+      window.open(
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedText}`,
+        "_blank",
+      );
 
       // 4. Finalize
       dispatch(clearCart());

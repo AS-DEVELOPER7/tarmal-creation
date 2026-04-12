@@ -1,11 +1,7 @@
 "use client";
 import Link from "next/link";
-import {
-  RiInstagramLine,
-  RiFacebookBoxLine,
-  RiPinterestLine,
-} from "react-icons/ri";
-import { LuGem } from "react-icons/lu";
+import { SOCIAL_LINKS } from "src/constants";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -14,9 +10,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center gap-2 text-primary">
-              <LuGem className="text-2xl" />
+              <Image src="/logo.png" alt="Logo" width={50} height={50} />
               <h2 className="text-lg font-bold font-serif text-base">
-                Tramal Creation
+                Tarmal Creation
               </h2>
             </Link>
             <p className="mt-4 text-sm max-w-sm text-muted">
@@ -53,23 +49,21 @@ export default function Footer() {
               Follow Us
             </h3>
             <div className="flex space-x-4">
-              {[RiInstagramLine, RiFacebookBoxLine, RiPinterestLine].map(
-                (Icon, i) => (
-                  <Link
-                    key={i}
-                    href="#"
-                    className="hover:text-primary transition"
-                  >
-                    <Icon className="text-2xl" />
-                  </Link>
-                )
-              )}
+              {SOCIAL_LINKS.map(({ Icon, href }, i) => (
+                <Link
+                  key={i}
+                  href={href}
+                  className="hover:text-primary transition"
+                >
+                  <Icon className="text-2xl" />
+                </Link>
+              ))}
             </div>
           </div>
         </div>
 
         <div className="mt-8 border-t border-border pt-8 text-center text-sm text-muted">
-          <p>© 2025 Tramal Creation. All Rights Reserved.</p>
+          <p>© 2025 Tarmal Creation. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

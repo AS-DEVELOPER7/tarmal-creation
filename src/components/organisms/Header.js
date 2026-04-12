@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { RiSearchLine } from "react-icons/ri";
-import { LuGem } from "react-icons/lu";
+import Image from "next/image";
 
 export default function Header() {
   const cart = useSelector((s) => s.cart.items || []);
@@ -12,8 +12,10 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between border-b border-border px-4 sm:px-10 py-3 bg-surface/90 backdrop-blur-md">
       <Link href="/" className="flex items-center gap-2 text-primary">
-        <LuGem className="text-2xl" />
-        <h2 className="text-lg font-bold font-serif text-base">Tramal Creation</h2>
+        <Image src="/logo.png" alt="Logo" width={50} height={50} />
+        <h2 className="text-lg font-bold font-serif text-base">
+          Tarmal Creation
+        </h2>
       </Link>
 
       <div className="flex gap-3 sm:gap-4">

@@ -28,22 +28,31 @@ export default function ProductCard({ product }) {
   } = product;
   const image = images?.[0] || product.image;
 
+  const defaultColor = variants?.[0]?.color || null;
+  const defaultSizeData = sizes?.[0] || null;
+
+  const finalSizeLabel =
+    defaultSizeData && typeof defaultSizeData === "object"
+      ? defaultSizeData.size
+      : defaultSizeData;
+
+  const finalPrice =
+    defaultSizeData && typeof defaultSizeData === "object"
+      ? defaultSizeData.price ?? price
+      : price;
+
   const handleAdd = (e) => {
     e.preventDefault();
     if (soldOut) return;
-
-    // Use default variations (first color/size)
-    const defaultColor = variants?.[0]?.color || null;
-    const defaultSize = sizes?.[0] || null;
 
     dispatch(
       addToCart({
         id,
         name,
         color: defaultColor,
-        size: defaultSize,
+        size: finalSizeLabel,
         image: image,
-        price,
+        price: finalPrice,
         soldOut,
         qty: 1,
       }),
@@ -56,7 +65,9 @@ export default function ProductCard({ product }) {
     show({
       type: "success",
       title: "Added to cart",
-      description: `${name}${colorDesc ? ` - ${colorDesc}` : ""}${defaultSize ? ` (${defaultSize})` : ""}`,
+      description: `${name}${colorDesc ? ` - ${colorDesc}` : ""}${
+        finalSizeLabel ? ` (${finalSizeLabel})` : ""
+      }`,
     });
   };
 
@@ -109,7 +120,7 @@ export default function ProductCard({ product }) {
           </h3>
         </Link>
         <p className="text-muted font-display font-medium">
-          {price?.toFixed(2)} {CURRENCY}
+          {finalPrice?.toFixed(2)} {CURRENCY}
         </p>
       </div>
     </motion.div>

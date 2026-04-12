@@ -41,7 +41,7 @@ export default function ProductInfo({
           {product.title}
         </h1>
         <div className="text-2xl font-display font-medium text-primary mt-4 mb-6">
-          {product.price?.toFixed(2)} {CURRENCY}
+          {(selectedSize?.price ?? product.price)?.toFixed(2)} {CURRENCY}
         </div>
       </motion.div>
 
@@ -163,19 +163,27 @@ export default function ProductInfo({
             Select Size
           </label>
           <div className="flex flex-wrap gap-3">
-            {product.sizes.map((s) => (
-              <button
-                key={s}
-                onClick={() => onSelectSize(s)}
-                className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 ${
-                  selectedSize === s
-                    ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
-                    : "border-border hover:border-primary/50 text-muted bg-transparent"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
+            {product.sizes.map((s) => {
+              const sizeLabel = typeof s === "object" ? s.size : s;
+              const isSelected =
+                (typeof selectedSize === "object"
+                  ? selectedSize?.size
+                  : selectedSize) === sizeLabel;
+
+              return (
+                <button
+                  key={sizeLabel}
+                  onClick={() => onSelectSize(s)}
+                  className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 ${
+                    isSelected
+                      ? "border-primary bg-primary text-white shadow-md shadow-primary/20"
+                      : "border-border hover:border-primary/50 text-muted bg-transparent"
+                  }`}
+                >
+                  {sizeLabel}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

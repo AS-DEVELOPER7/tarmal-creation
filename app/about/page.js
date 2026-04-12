@@ -55,7 +55,7 @@ function BehindTheScenes() {
       <h2 className="text-3xl font-bold text-center text-primary mb-8">
         Behind the Scenes
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         {ABOUT_US_IMAGES.behindTheScene.map((src, i) => (
           <div
             key={i}
@@ -114,8 +114,8 @@ function FounderSection() {
       <div className="w-full lg:w-2/5">
         <div className="relative aspect-3/4 rounded-lg overflow-hidden shadow-md">
           <Image
-            src={ABOUT_US_IMAGES.founder}
-            alt="Founder Portrait"
+            src={ABOUT_US_IMAGES.behindTheScene[1]}
+            alt="Our Workshop"
             fill
             className="object-cover"
           />
@@ -126,7 +126,7 @@ function FounderSection() {
           Our Founder
         </p>
         <h3 className="text-2xl text-base md:text-3xl font-bold">
-          Meet <span className="text-primary">Jane Doe</span>
+          Meet <span className="text-primary">Arwa Peeth</span>
         </h3>
         <p className="text-muted  leading-relaxed">
           It all started with a simple idea and a desire to create something

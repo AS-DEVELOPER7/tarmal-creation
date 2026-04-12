@@ -82,6 +82,8 @@ export default function ProductDetails() {
     );
   }
 
+  const currentSizeLabel =
+    typeof selectedSize === "object" ? selectedSize?.size : selectedSize;
   const itemInCart = cart.find(
     (i) =>
       i.id === product.id &&
@@ -90,7 +92,7 @@ export default function ProductDetails() {
         (selectedVariant?.selectedColor?.color ||
           selectedVariant?.color ||
           null) &&
-      i.size === (selectedSize || null),
+      i.size === (currentSizeLabel || null),
   );
 
   const handleAdd = () => {
@@ -99,6 +101,9 @@ export default function ProductDetails() {
       selectedVariant?.images?.[0] ||
       selectedVariant?.selectedStyle?.images?.[0] ||
       product?.images?.[0];
+
+    const finalPrice = selectedSize?.price ?? product.price;
+
     dispatch(
       addToCart({
         id: product.id,
@@ -108,9 +113,9 @@ export default function ProductDetails() {
           selectedVariant?.selectedColor?.color ||
           selectedVariant?.color ||
           null,
-        size: selectedSize || null,
+        size: currentSizeLabel || null,
         image: mainImg,
-        price: product.price,
+        price: finalPrice,
         soldOut: product.sold_out,
         qty,
       }),
@@ -202,8 +207,8 @@ export default function ProductDetails() {
                 </h4>
                 <p className="text-muted text-sm leading-relaxed">
                   Gently wipe with a soft cloth after wear to retain its
-                  brilliant shine. Store in the provided Aura pouch in a cool,
-                  dry place. Avoid contact with perfumes and lotions.
+                  brilliant shine. Store in the provided pouch in a cool, dry
+                  place. Avoid contact with perfumes and lotions.
                 </p>
               </div>
             </div>

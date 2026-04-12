@@ -8,8 +8,8 @@ export const metadata = {
   description:
     "An elegant jewelry boutique showcasing timeless handcrafted designs.",
   icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
