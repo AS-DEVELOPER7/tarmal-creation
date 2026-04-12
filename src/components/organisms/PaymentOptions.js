@@ -39,7 +39,7 @@ export default function PaymentOptions({
           <p className="font-semibold">Instructions:</p>
           <ol className="list-decimal list-inside space-y-1 text-muted">
             <li>
-              Send your <span className="font-semibold">Order ID</span> to our
+              Send your <span className="font-semibold">Order</span> to our
               WhatsApp number:
               <span className="text-primary font-semibold">
                 {" "}
